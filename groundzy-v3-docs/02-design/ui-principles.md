@@ -47,7 +47,7 @@ Brand colors and semantic tokens (e.g. workflow step colors) live in **design to
 ## Anti-patterns (legacy to avoid)
 
 - Importing `Button`, `Card`, `Dialog` from `@/components/ui` inside `app/drawers/*` or feature folders.
-- **Exception drawers** without a shared shell (see `docs/drawer-shell-classification.md`) — in v3, exceptions are **rare** and implemented **inside** Groundzy UI (e.g. `GzWizardLayout`), not in raw feature JSX.
+- **Exception drawers** without a shared shell (see `docs/audits/drawer-shell-classification.md`) — in v3, exceptions are **rare** and implemented **inside** Groundzy UI (e.g. `GzWizardLayout`), not in raw feature JSX.
 
 ---
 

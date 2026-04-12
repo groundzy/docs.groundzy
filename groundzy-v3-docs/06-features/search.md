@@ -17,7 +17,7 @@ All authenticated users; **clients/properties** results gated by **Pro/Teams** (
 
 ## UI patterns
 
-**Exception drawer:** `search` **without** `DrawerShell` (`docs/drawer-shell-classification.md`)—standalone list + `ListContainer`.
+**Exception drawer:** `search` **without** `DrawerShell` (`docs/audits/drawer-shell-classification.md`)—standalone list + `ListContainer`.
 
 ## Dependencies
 

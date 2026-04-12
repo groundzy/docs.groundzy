@@ -26,4 +26,4 @@ Internationalization in `lib/i18n/`.
 6. **Server components** — No `useI18n`; import `messages` and the resolved locale (e.g. cookie + `normalizeLocale`) like `generateMetadata` in `app/layout.tsx`.
 7. **Registry** — Drawer titles in `lib/drawers.ts` are English fallbacks; user-facing nav should use `navigation.drawerLabels.*` in `messages.ts` when the drawer appears in the sidebar/More menu.
 
-See also [DRAWER_PR_CHECKLIST.md](../../DRAWER_PR_CHECKLIST.md) (copy / i18n checkbox).
+See also [DRAWER_PR_CHECKLIST.md](../../audits/DRAWER_PR_CHECKLIST.md) (copy / i18n checkbox).

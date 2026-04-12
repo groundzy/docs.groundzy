@@ -17,7 +17,7 @@ All tiers (**Home** through **Teams**). **Filter affordances** differ: e.g. prop
 ## UI patterns
 
 - **Shell:** Map always visible in main layout; drawers slide over **work area**, not replacing map (`components/layout/app-layout.tsx`).
-- **Exceptions:** `draw` drawer uses documented shell exception (`docs/drawer-shell-classification.md`).
+- **Exceptions:** `draw` drawer uses documented shell exception (`docs/audits/drawer-shell-classification.md`).
 - **Context menus:** Tree, zone, property right-click menus (`components/map/`).
 
 ## Dependencies

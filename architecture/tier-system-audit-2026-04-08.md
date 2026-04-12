@@ -5,10 +5,10 @@
 
 **Related existing docs (still useful):**
 
-- `docs/pricing-tier-subscription-audit-2026-04.md` — broader Stripe + marketing cross-app notes (includes `auth.groundzy` references).
+- `docs/audits/pricing-tier-subscription-audit-2026-04.md` — broader Stripe + marketing cross-app notes (includes `auth.groundzy` references).
 - `docs/architecture/tiers-workflow-vs-record-keeping-audit.md` — workflow vs record-keeping split + file index (partially stale vs current `lib/drawers.ts`).
 - `docs/architecture/unified-tier-workflow-system-plan.md` — intended consolidation roadmap.
-- `docs/operations-backfill-subscription-tier.md` — operational backfill for legacy Plus tier integrity issues.
+- `docs/operations/backfill-subscription-tier.md` — operational backfill for legacy Plus tier integrity issues.
 
 ---
 

@@ -12,13 +12,13 @@ Evidence from internal docs and spot-checks of `app/drawers/**`:
 
 | Finding | Source / example |
 |--------|-------------------|
-| **Many drawer shell patterns** | `docs/drawer-visual-inventory.md` — mix of `DrawerShell`, `ListContainer`, `ScrollArea`, exceptions without shell (`search`, `tree-add`, wizards). |
-| **Documented exceptions** | `docs/drawer-shell-classification.md` — multiple approved non-standard roots (search, tree-add, identifying wand, groundzy-wizard, etc.). |
+| **Many drawer shell patterns** | `docs/audits/drawer-visual-inventory.md` — mix of `DrawerShell`, `ListContainer`, `ScrollArea`, exceptions without shell (`search`, `tree-add`, wizards). |
+| **Documented exceptions** | `docs/audits/drawer-shell-classification.md` — multiple approved non-standard roots (search, tree-add, identifying wand, groundzy-wizard, etc.). |
 | **Per-drawer visual overrides** | Weather gradient, `bg-transparent` shells, `brandedDeepTealCardClass`, `contentCardClass` — same product, many visual dialects. |
 | **Direct shadcn in feature code** | e.g. `app/drawers/job-form.tsx`, `client-form.tsx`, `view-tree/index.tsx` import `Button`, `Card`, `Dialog` from `@/components/ui/*` directly. |
 | **Modals / dialogs** | Mix of `Dialog` from ui, `ConfirmDestructiveDialog`, zone-specific dialog components — not one composable family in feature land. |
 | **Forms** | Shared primitives exist, but features assemble labels, inputs, cards per screen with duplicated layout patterns. |
-| **Maintainability** | `docs/drawer-system-current-state.md` — megafiles, consistency score below architecture score. |
+| **Maintainability** | `docs/audits/drawer-system-current-state.md` — megafiles, consistency score below architecture score. |
 
 **Conclusion:** The legacy app already has **drawer-layout** and **ui** building blocks, but **features bypass a strict product layer** and import shadcn directly. v3 **formalizes** that layer and **enforces** it.
 

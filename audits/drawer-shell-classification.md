@@ -53,7 +53,7 @@ All **other** `registerDrawer` IDs use **`DrawerShell`** at the entry component 
 
 Target **~400 lines** for top orchestration entry files (`contact-us`, `request-form`, `view-zone`, `ai-chat`, `profile`). Prefer extracting sections before adding features when a file is already above the budget. Non-blocking CI warning: `npm run verify:drawers` (includes **nested** drawer entry files listed in `NESTED_ENTRY_FILES` in [`scripts/drawer-pr-check-warn.mjs`](../scripts/drawer-pr-check-warn.mjs) — add a path there when you register a new `import("@/app/drawers/.../index")` in [`lib/drawers.ts`](../lib/drawers.ts)).
 
-Recent Phase C work extracted presentational sections under colocated folders while keeping each entry as a **composition root** with `DrawerShell` unchanged — **no new exception rows** were required (see `docs/drawer-refactor-second-pass-retrospective.md` §9).
+Recent Phase C work extracted presentational sections under colocated folders while keeping each entry as a **composition root** with `DrawerShell` unchanged — **no new exception rows** were required (see `docs/handoffs/drawer-refactor-second-pass-retrospective.md` §9).
 
 ---
 

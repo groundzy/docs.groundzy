@@ -68,4 +68,4 @@ Standard behavior for **loading**, **empty**, **error**, **transitions**, and **
 
 - [`component-standards.md`](./component-standards.md)
 - [`layout-system.md`](./layout-system.md)
-- Legacy reference: `docs/drawer-navigation.md`, `stores/navigation-store.ts` (dirty workflow behavior to be reimplemented behind Gz patterns)
+- Legacy reference: `docs/audits/drawer-navigation.md`, `stores/navigation-store.ts` (dirty workflow behavior to be reimplemented behind Gz patterns)

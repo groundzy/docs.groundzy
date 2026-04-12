@@ -20,7 +20,7 @@
 
 ## UI patterns
 
-Wizard full-bleed drawer exception; chat uses **ScrollArea** for thread (`drawer-shell-classification.md`). **Identifying wand store** for handoff to tree-add/edit.
+Wizard full-bleed drawer exception; chat uses **ScrollArea** for thread (`docs/audits/drawer-shell-classification.md`). **Identifying wand store** for handoff to tree-add/edit.
 
 ## Dependencies
 

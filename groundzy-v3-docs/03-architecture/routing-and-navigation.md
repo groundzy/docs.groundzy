@@ -17,7 +17,7 @@
 
 ### History and back/forward
 
-- **`navigation-store`** maintains `drawerHistory`, `goBack` / `goForward` (`docs/drawer-audit.md`).
+- **`navigation-store`** maintains `drawerHistory`, `goBack` / `goForward` (`docs/audits/drawer-audit.md`).
 - **Workflow dirty state:** `WORKFLOW_DRAWERS` + `useWorkflowFormDirty` — discard confirm before leaving (`WorkflowFormDiscardDialog` in layout).
 
 ### Mobile vs desktop
@@ -67,4 +67,4 @@ For the **main authenticated product** (map + work area), **drawers** are a **fi
 - [`state-management.md`](./state-management.md)
 - [`frontend-architecture.md`](./frontend-architecture.md)
 - `lib/drawer-utils.ts`, `lib/drawers.ts` (legacy)
-- `docs/drawer-navigation.md` (legacy)
+- `docs/audits/drawer-navigation.md` (legacy)

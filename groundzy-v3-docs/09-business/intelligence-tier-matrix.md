@@ -25,7 +25,7 @@
 | **Pro** | + Tree-specific, richer combined | Yes | Yes | Optional / gated | Deeper actions |
 | **Teams** | + Workflow-aware, assignment routing | Yes | Yes | Premium opt-in | Triggers, team routing |
 
-Exact rows must match [`PRICING-REFERENCE.md`](../../PRICING-REFERENCE.md) or internal pricing docs when published.
+Exact rows must match [`pricing-reference.md`](../../reference/pricing-reference.md) or internal pricing docs when published.
 
 ---
 

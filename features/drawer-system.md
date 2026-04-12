@@ -11,10 +11,10 @@ The drawer system provides a centralized, lazy-loaded navigation layer for all m
 
 ## Visual consistency
 
-- **Layout primitives**: `components/drawer-layout/` — `DrawerShell`, `DrawerScrollArea`, `DrawerSection`, `DrawerFooter`, etc. Binary shell vs exception rules: [`docs/drawer-shell-classification.md`](../drawer-shell-classification.md).
+- **Layout primitives**: `components/drawer-layout/` — `DrawerShell`, `DrawerScrollArea`, `DrawerSection`, `DrawerFooter`, etc. Binary shell vs exception rules: [`docs/audits/drawer-shell-classification.md`](../audits/drawer-shell-classification.md).
 - **Card tiers**: Shared Tailwind class strings in [`lib/card-styles.ts`](../../lib/card-styles.ts) — e.g. `contentCardClass` (default glass card via shadcn `Card`), `DrawerSection` (titled sections; composes the same card surface), `listItemCardClass` / `listItemCardTintedClass`, `brandedDeepTealCardClass` (tea-green border + deep-teal fill), `deepTealSurfaceCardClass` (semantic border + deep-teal fill for workflow detail blocks). Prefer these over ad hoc `bg-[hsl(...)]` + border classes in drawer code.
 - **Tokens**: Semantic HSL in `app/globals.css` (`:root`, `@theme`). Drawer-oriented aliases `--drawer-canvas` and `--drawer-card` default to the same surfaces as `--deep-teal` / `--card`; Tailwind utilities `bg-drawer-canvas` and `bg-drawer-card` are available when a surface should track those tokens. The **weather** drawer applies `.weather-drawer-gradient` with scoped glass variables for text and cards on the hero gradient (see comments in `globals.css`).
-- **Inventory**: Per-drawer shell, scroll, and card classification: [`docs/drawer-visual-inventory.md`](../drawer-visual-inventory.md).
+- **Inventory**: Per-drawer shell, scroll, and card classification: [`docs/audits/drawer-visual-inventory.md`](../audits/drawer-visual-inventory.md).
 
 ## Drawer Metadata
 

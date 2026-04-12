@@ -36,7 +36,7 @@ Every drawer or full-page view follows the same **vertical stack**:
 └──────────────────────────────┘
 ```
 
-- **Body** is the only scroll region by default (matches legacy `DrawerScrollArea` guidance in `docs/drawer-shell-classification.md`).
+- **Body** is the only scroll region by default (matches legacy `DrawerScrollArea` guidance in `docs/audits/drawer-shell-classification.md`).
 - **Footer** stays outside scroll for sticky primary actions.
 
 ---

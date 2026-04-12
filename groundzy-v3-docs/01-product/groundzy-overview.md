@@ -55,7 +55,7 @@ Internal docs describe real constraints that a greenfield approach can address h
 | Theme | What the repo reflects |
 |--------|-------------------------|
 | **Uneven cohesion** | The workflow audit documents stages and relationships but also lists **gaps, inconsistencies, and technical debt** (conversion semantics, status sync, duplicate helpers, type vs UI mismatches, map linkage limits). See `docs/features/current-workflow-audit.md` (noting: a separate **workflow upgrade** doc describes later improvements—treat the audit as historical analysis, not necessarily the live state of every line). |
-| **UI/UX and maintainability at scale** | The drawer system doc scores **maintainability** below architecture and notes **megafiles**, registry comment drift, and ordering collisions. See `docs/drawer-system-current-state.md`. |
+| **UI/UX and maintainability at scale** | The drawer system doc scores **maintainability** below architecture and notes **megafiles**, registry comment drift, and ordering collisions. See `docs/audits/drawer-system-current-state.md`. |
 | **Fragmented connectivity** | Workflow was initially **navigation + prefill**-heavy; upgrades moved toward relational conversions and shared line-item mappers (`docs/features/workflow-upgrade-implementation.md`). Remaining cross-cutting concerns (visibility, permissions, unified work items) appear in broader architecture plans (e.g. `docs/architecture/` master plans). |
 | **Product model complexity** | Tier naming and signup models do not map 1:1 with runtime subscription types (e.g. `types/signup-flow.ts` vs `SubscriptionTier` in `lib/drawer-registry.ts`), which increases cognitive load for both users and implementers. |
 
@@ -142,4 +142,4 @@ v3 may **keep** the same ecosystem or adjust it; this table describes the **lega
 
 ---
 
-*Evidence for feature and tier descriptions: `docs/PROJECT_OVERVIEW.md`, `docs/features/README.md`, `types/signup-flow.ts`, `lib/drawer-registry.ts`, `lib/utils/tier-utils.ts`. Evidence for engineering tradeoffs: `docs/features/current-workflow-audit.md`, `docs/drawer-system-current-state.md`, `docs/features/workflow-upgrade-implementation.md`.*
+*Evidence for feature and tier descriptions: `docs/PROJECT_OVERVIEW.md`, `docs/features/README.md`, `types/signup-flow.ts`, `lib/drawer-registry.ts`, `lib/utils/tier-utils.ts`. Evidence for engineering tradeoffs: `docs/features/current-workflow-audit.md`, `docs/audits/drawer-system-current-state.md`, `docs/features/workflow-upgrade-implementation.md`.*

@@ -46,7 +46,7 @@
 
 ## 3. DrawerShell adoption status
 
-**Classification rule (from `docs/drawer-shell-classification.md`):** each registered id is either **DrawerShell** (or an approved wrapper that renders it, e.g. `view-tree` → `ViewTreeDrawerLayout`) **or** a **documented exception**.
+**Classification rule (from `docs/audits/drawer-shell-classification.md`):** each registered id is either **DrawerShell** (or an approved wrapper that renders it, e.g. `view-tree` → `ViewTreeDrawerLayout`) **or** a **documented exception**.
 
 **Documented exceptions** (approved alternative patterns): `search`, `tree-add`, `edit-tree`, `multiple-add`, `ai-identifying-wand`, `groundzy-wizard`.
 
@@ -246,8 +246,8 @@ Counts from `npm run verify:drawers` (includes blanks). **Treat the script outpu
 
 | Artifact | Present | Role |
 |----------|---------|------|
-| `docs/DRAWER_PR_CHECKLIST.md` | Yes | Human checklist (Shell vs exception, scroll, registry, `role`, workflow dirty, i18n). |
-| `docs/drawer-shell-classification.md` | Yes | Binary rule + **exception table** + Phase C line budget note. |
+| `docs/audits/DRAWER_PR_CHECKLIST.md` | Yes | Human checklist (Shell vs exception, scroll, registry, `role`, workflow dirty, i18n). |
+| `docs/audits/drawer-shell-classification.md` | Yes | Binary rule + **exception table** + Phase C line budget note. |
 | `scripts/drawer-pr-check-warn.mjs` | Yes | Warns on top-level `app/drawers/*.tsx` **and** allowlisted nested entries (`NESTED_ENTRY_FILES`) **> 400 lines**; **exit 0 always**. |
 | `npm run verify:drawers` | Yes in `package.json` | Runs the script above. |
 | `.github/workflows/ci.yml` | Yes | Runs **`npm run verify:drawers`** after lint, **before build** — still **warning-only** (script never fails). |
@@ -328,7 +328,7 @@ Counts from `npm run verify:drawers` (includes blanks). **Treat the script outpu
 
 ## Related docs
 
-- [`drawer-refactor-second-pass-retrospective.md`](drawer-refactor-second-pass-retrospective.md) — second-pass deliverables, Phase C notes, `verify:drawers` as backlog.
+- [`drawer-refactor-second-pass-retrospective.md`](../handoffs/drawer-refactor-second-pass-retrospective.md) — second-pass deliverables, Phase C notes, `verify:drawers` as backlog.
 - [`DRAWER_PR_CHECKLIST.md`](DRAWER_PR_CHECKLIST.md), [`drawer-shell-classification.md`](drawer-shell-classification.md), [`drawer-navigation.md`](drawer-navigation.md)
 
 ---

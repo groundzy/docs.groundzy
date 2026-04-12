@@ -20,4 +20,4 @@ Users who **paid for Groundzy Plus** while Firestore still had `subscription.tie
 - [ ] App profile: Pro checkout still works.
 - [ ] Teams: checkout → team created; `subscription.tier` is **Small Team** / **Mid Team** / **Large Team** (not ambiguous `Teams` only).
 - [ ] Stripe **Customer portal** plan change updates tier via **price ID** mapping.
-- [ ] Only **one** webhook endpoint is configured in Stripe for production (see [stripe-webhooks.md](./stripe-webhooks.md)).
+- [ ] Only **one** webhook endpoint is configured in Stripe for production (see [stripe-webhooks.md](../reference/stripe-webhooks.md)).

@@ -14,7 +14,7 @@ The repository implements **multiple overlapping concepts** for “what happened
 
 **UI/UX**
 
-The app has a **real design system** (`components/ui/`, `components/drawer-layout/`, documented **DrawerShell** rules), but **many documented exceptions** and **per-drawer visual overrides** (`docs/drawer-visual-inventory.md`). Internal audits score **maintainability below architecture** and call out **megafiles** and **registry/ordering drift** (`docs/drawer-system-current-state.md`). Several drawers intentionally diverge (search without `DrawerShell`, full-bleed wizards, large forms), which preserves flexibility but works against a single “one app” feel.
+The app has a **real design system** (`components/ui/`, `components/drawer-layout/`, documented **DrawerShell** rules), but **many documented exceptions** and **per-drawer visual overrides** (`docs/audits/drawer-visual-inventory.md`). Internal audits score **maintainability below architecture** and call out **megafiles** and **registry/ordering drift** (`docs/audits/drawer-system-current-state.md`). Several drawers intentionally diverge (search without `DrawerShell`, full-bleed wizards, large forms), which preserves flexibility but works against a single “one app” feel.
 
 ---
 
@@ -69,7 +69,7 @@ For **Groundzy v3**, shipping a **unified history model** and **consistent shell
 | **Name / concept** | First-class entities with **status enums** (e.g. `Request.status`, `Quote.status`, `Job.status`, `Invoice` states) — see `types/request.ts`, `types/quote.ts`, `types/job.ts`, `types/invoice.ts`. |
 | **Purpose** | Commercial pipeline; **not** implemented (in the types reviewed) as a separate append-only **status change log** collection—state lives on the **document**. |
 | **Files** | `app/drawers/view-*`, `app/drawers/*-form`, `lib/workflow/*`, `docs/features/current-workflow-audit.md` (gaps in conversion/backlinks documented separately). |
-| **Tiers** | **Teams** drawers for full workflow per `lib/drawers.ts` / `docs/drawer-audit.md`. |
+| **Tiers** | **Teams** drawers for full workflow per `lib/drawers.ts` / `docs/audits/drawer-audit.md`. |
 | **Mirrors** | `work_items` rows with `workflow_*` kinds and `source.workflowDocumentId` / `workflowCollection` (`types/work-item.ts`). |
 | **Overlap** | Parallel representation of “what’s happening” in **CRM doc** vs **`work_items` mirror** vs **tree history** when jobs/services are recorded on trees. |
 
@@ -141,13 +141,13 @@ For **Groundzy v3**, shipping a **unified history model** and **consistent shell
 
 | Finding | Evidence |
 |---------|----------|
-| **Binary DrawerShell rule + many exceptions** | `docs/drawer-shell-classification.md` — `search`, `tree-add`, `edit-tree`, `multiple-add`, `ai-identifying-wand`, `groundzy-wizard` use **non-standard** root patterns by design. |
-| **Per-drawer visual divergence** | `docs/drawer-visual-inventory.md` — e.g. weather gradient, trees/clients `bg-transparent`, Pro forms `brandedDeepTealCardClass`, search **no DrawerShell**. |
-| **Drawer count and registry drift** | `docs/drawer-audit.md` — **56** drawer IDs; `drawer-system-current-state.md` — registry header undercounts, **four drawers share `order: 1.1`**. |
+| **Binary DrawerShell rule + many exceptions** | `docs/audits/drawer-shell-classification.md` — `search`, `tree-add`, `edit-tree`, `multiple-add`, `ai-identifying-wand`, `groundzy-wizard` use **non-standard** root patterns by design. |
+| **Per-drawer visual divergence** | `docs/audits/drawer-visual-inventory.md` — e.g. weather gradient, trees/clients `bg-transparent`, Pro forms `brandedDeepTealCardClass`, search **no DrawerShell**. |
+| **Drawer count and registry drift** | `docs/audits/drawer-audit.md` — **56** drawer IDs; `docs/audits/drawer-system-current-state.md` — registry header undercounts, **four drawers share `order: 1.1`**. |
 | **Megafiles / maintainability** | Same doc §9 — **~20** top-level files **>400 lines**; maintainability score **6/10**; Phase C extraction backlog (`view-zone`, `request-form`, `contact-us`, `ai-chat`, `profile`). |
-| **Special-case wiring** | `docs/drawer-audit.md` — **`withRetry`** only on **`entry-form`** chunk loads; inconsistent with other lazy imports. |
-| **Comment / metadata mismatch** | `docs/drawer-audit.md` — `ai-identifying-wand`: `showHeaderNav` vs comment “no back/forward” **disagree** — QA risk. |
-| **Workflow dirty vs forms** | `WORKFLOW_DRAWERS` includes CRM workflow forms **and** `entry-form` for tree history (`stores/navigation-store.ts`, `docs/drawer-system-current-state.md`); other form-like drawers may **not** get discard protection — intentional but uneven. |
+| **Special-case wiring** | `docs/audits/drawer-audit.md` — **`withRetry`** only on **`entry-form`** chunk loads; inconsistent with other lazy imports. |
+| **Comment / metadata mismatch** | `docs/audits/drawer-audit.md` — `ai-identifying-wand`: `showHeaderNav` vs comment “no back/forward” **disagree** — QA risk. |
+| **Workflow dirty vs forms** | `WORKFLOW_DRAWERS` includes CRM workflow forms **and** `entry-form` for tree history (`stores/navigation-store.ts`, `docs/audits/drawer-system-current-state.md`); other form-like drawers may **not** get discard protection — intentional but uneven. |
 | **Huge composite forms** | `add-tree-form.tsx` and similar — multi-thousand-line orchestration increases **one-off** UX variance. |
 
 ---
@@ -155,7 +155,7 @@ For **Groundzy v3**, shipping a **unified history model** and **consistent shell
 ## 5. Most Fragmented Areas
 
 1. **View tree** — Tabs (overview, activity, ops, ecology, media, system, optional community) + `TreeHistoryView` merge logic + optional work items — high **cognitive and code** surface (`app/drawers/view-tree/`).
-2. **Search drawer** — **Documented exception** without `DrawerShell** (`drawer-shell-classification.md`) — structurally isolated from the default shell stack.
+2. **Search drawer** — **Documented exception** without `DrawerShell** (`docs/audits/drawer-shell-classification.md`) — structurally isolated from the default shell stack.
 3. **AI flows** — `ai-identifying-wand`, `groundzy-wizard`, `ai-chat` — full-bleed / custom chrome vs standard detail drawers.
 4. **Contact / inbox** — `contact-us` combines support inbox, threads, share-tree, access requests (`app/drawers/contact-us.tsx`) — multi-mode “mini app” inside one drawer id.
 5. **CRM workflow** — List + view + form drawers per stage; card-list consistency documented, but **workflow audit** lists conversion/status gaps (`docs/features/current-workflow-audit.md`).
@@ -167,9 +167,9 @@ For **Groundzy v3**, shipping a **unified history model** and **consistent shell
 | Topic | Assessment |
 |-------|------------|
 | **Shared system exists** | **Yes** — `components/ui/` (shadcn/Radix), `components/drawer-layout/` (`DrawerShell`, `DrawerScrollArea`, `DrawerFooter`, `ListContainer`, etc.). |
-| **Partial standardization** | **Yes** — `docs/drawer-visual-inventory.md` and **workflow step** color tokens (see `.cursor/rules/workflow-step-colors.mdc`, `app/globals.css`) show deliberate reuse in places. |
+| **Partial standardization** | **Yes** — `docs/audits/drawer-visual-inventory.md` and **workflow step** color tokens (see `.cursor/rules/workflow-step-colors.mdc`, `app/globals.css`) show deliberate reuse in places. |
 | **Bypassing shared patterns** | **Documented exceptions** are **explicit** (search, wizards, tree-add hosts); **not** necessarily accidental, but they **multiply** interaction models. |
-| **Fragmented custom UI** | Large drawer-specific components, **one-off** scroll regions (chat/contact threads per `drawer-shell-classification.md`), and **branded** card classes for Pro forms create **visual families** that read as sub-products. |
+| **Fragmented custom UI** | Large drawer-specific components, **one-off** scroll regions (chat/contact threads per `docs/audits/drawer-shell-classification.md`), and **branded** card classes for Pro forms create **visual families** that read as sub-products. |
 
 ---
 
@@ -218,10 +218,10 @@ For **Groundzy v3**, shipping a **unified history model** and **consistent shell
 ### Drawer / UI / audits
 
 - `lib/drawers.ts`, `lib/drawer-registry.ts` — registration and metadata.
-- `docs/drawer-shell-classification.md` — shell vs exceptions.
-- `docs/drawer-visual-inventory.md` — per-drawer UI patterns.
-- `docs/drawer-audit.md` — full inventory, wiring notes.
-- `docs/drawer-system-current-state.md` — megafiles, scores, debt.
+- `docs/audits/drawer-shell-classification.md` — shell vs exceptions.
+- `docs/audits/drawer-visual-inventory.md` — per-drawer UI patterns.
+- `docs/audits/drawer-audit.md` — full inventory, wiring notes.
+- `docs/audits/drawer-system-current-state.md` — megafiles, scores, debt.
 - `components/drawer-layout/` — shared drawer primitives.
 - `stores/navigation-store.ts` — `WORKFLOW_DRAWERS`, drawer history.
 

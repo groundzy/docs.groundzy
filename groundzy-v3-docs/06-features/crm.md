@@ -18,7 +18,7 @@
 
 ## UI patterns
 
-List + **view** + **add/edit** drawers (`clients-properties` combined list, or separate `clients` / `properties` hidden nav entries). **Map:** property polygons (`property-layer.tsx`). **Branded** form cards on Pro forms (`docs/drawer-visual-inventory.md`).
+List + **view** + **add/edit** drawers (`clients-properties` combined list, or separate `clients` / `properties` hidden nav entries). **Map:** property polygons (`property-layer.tsx`). **Branded** form cards on Pro forms (`docs/audits/drawer-visual-inventory.md`).
 
 ## Dependencies
 

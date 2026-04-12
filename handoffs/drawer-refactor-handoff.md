@@ -20,10 +20,10 @@ Phase 2 established **how** drawer work stays consistent over time.
 
 | Item | Purpose |
 |------|---------|
-| **Binary Shell rule** | Every registered drawer is either **using `DrawerShell`** (from `@/components/drawer-layout`) or **listed as a documented exception** — no unnamed “third state.” See [`docs/drawer-shell-classification.md`](drawer-shell-classification.md). |
+| **Binary Shell rule** | Every registered drawer is either **using `DrawerShell`** (from `@/components/drawer-layout`) or **listed as a documented exception** — no unnamed “third state.” See [`docs/audits/drawer-shell-classification.md`](../audits/drawer-shell-classification.md). |
 | **`npm run verify:drawers`** | Non-blocking **line-count warning** for top-level `app/drawers/*.tsx` files over **400 lines** (see [`scripts/drawer-pr-check-warn.mjs`](../scripts/drawer-pr-check-warn.mjs)). Exit code stays 0; treat output as a backlog signal. |
-| **PR checklist** | [`docs/DRAWER_PR_CHECKLIST.md`](DRAWER_PR_CHECKLIST.md) — reviewers expect drawer PRs to respect Shell/scroll patterns where applicable. |
-| **Retrospective** | [`docs/drawer-refactor-second-pass-retrospective.md`](drawer-refactor-second-pass-retrospective.md) — narrative of passes, inventories, gaps. |
+| **PR checklist** | [`docs/audits/DRAWER_PR_CHECKLIST.md`](../audits/DRAWER_PR_CHECKLIST.md) — reviewers expect drawer PRs to respect Shell/scroll patterns where applicable. |
+| **Retrospective** | [`docs/handoffs/drawer-refactor-second-pass-retrospective.md`](./drawer-refactor-second-pass-retrospective.md) — narrative of passes, inventories, gaps. |
 
 **Required extractions (Phase 2 “no longer optional”)** — these were treated as **must-ship** so they would not linger as “someday”:
 
@@ -43,7 +43,7 @@ Phase 2 established **how** drawer work stays consistent over time.
 - **Behavior-neutral** extractions unless a bugfix is explicitly scoped.
 - **No new architecture layer** — presentational components + props/callbacks from parent.
 - **Parent keeps hooks and orchestration** until a slice is clearly bounded.
-- If a PR changes a drawer **root layout**, update [`docs/drawer-shell-classification.md`](drawer-shell-classification.md) in the same PR.
+- If a PR changes a drawer **root layout**, update [`docs/audits/drawer-shell-classification.md`](../audits/drawer-shell-classification.md) in the same PR.
 
 **Suggested priority order for the “big five” interaction drawers:**
 
@@ -194,8 +194,8 @@ Touch these paths manually when behavior could have shifted:
 ## 9. Suggested next steps for future work
 
 1. Continue **Phase C** on remaining large entries: e.g. **`ai-chat.tsx`**, **`profile.tsx`**, then other top offenders from `verify:drawers` (`dashboard`, `client-form`, etc.) as scope allows.
-2. Keep **`drawer-shell-classification.md`** updated whenever a drawer **root layout** changes (Shell vs documented exception).
-3. Optionally refresh **`docs/drawer-audit.md`** §3 line counts if that doc is still the registry inventory you trust.
+2. Keep **`docs/audits/drawer-shell-classification.md`** updated whenever a drawer **root layout** changes (Shell vs documented exception).
+3. Optionally refresh **`docs/audits/drawer-audit.md`** §3 line counts if that doc is still the registry inventory you trust.
 4. Prefer **one extraction per PR** with regression smoke on the three sensitive flows above.
 
 ---
@@ -204,10 +204,10 @@ Touch these paths manually when behavior could have shifted:
 
 | Doc | Role |
 |-----|------|
-| [`docs/drawer-shell-classification.md`](drawer-shell-classification.md) | Shell vs exception rule + line budget note |
-| [`docs/drawer-refactor-second-pass-retrospective.md`](drawer-refactor-second-pass-retrospective.md) | Detailed retrospective & inventories |
-| [`docs/drawer-audit.md`](drawer-audit.md) | Registry / audit |
-| [`docs/DRAWER_PR_CHECKLIST.md`](DRAWER_PR_CHECKLIST.md) | PR expectations |
+| [`docs/audits/drawer-shell-classification.md`](../audits/drawer-shell-classification.md) | Shell vs exception rule + line budget note |
+| [`docs/handoffs/drawer-refactor-second-pass-retrospective.md`](./drawer-refactor-second-pass-retrospective.md) | Detailed retrospective & inventories |
+| [`docs/audits/drawer-audit.md`](../audits/drawer-audit.md) | Registry / audit |
+| [`docs/audits/DRAWER_PR_CHECKLIST.md`](../audits/DRAWER_PR_CHECKLIST.md) | PR expectations |
 | [`lib/drawers.ts`](../lib/drawers.ts) | Lazy registry (do not break public paths) |
 
 ---

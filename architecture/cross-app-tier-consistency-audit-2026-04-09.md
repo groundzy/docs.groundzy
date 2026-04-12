@@ -209,7 +209,7 @@ This document is **evidence-based from repository code as of the audit date**; i
 4. **`normalizeTier` maps `teams` → `Small Team`:** Could **mask** bad data instead of failing visible.
 5. **Dual team size vocabularies:** **`small/mid/large`** vs **`10/25/50/enterprise`** (`types/signup-flow.ts` vs `auth` pricing).
 6. **Enterprise:** Sold as custom in FAQ; **code** maps **enterprise → Large Team** price in **`stripe-config.ts`** — **clarify** actual billing for Enterprise accounts.
-7. **Internal docs:** Older audits (e.g. `docs/pricing-tier-subscription-audit-2026-04.md`) may cite **stale** numeric caps; **`lib/ai-usage.ts`** is the **numeric SOT** for enforcement today.
+7. **Internal docs:** Older audits (e.g. `docs/audits/pricing-tier-subscription-audit-2026-04.md`) may cite **stale** numeric caps; **`lib/ai-usage.ts`** is the **numeric SOT** for enforcement today.
 
 ---
 

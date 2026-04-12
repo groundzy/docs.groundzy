@@ -16,7 +16,7 @@
 | Contact-us: thread + composer | **Done** — `ContactUsThread`, `ContactUsThreadComposer`; gallery dialog currently in parent |
 | View zone: species + bulk services block | **Done** — `ViewZoneSpeciesAndServicesSection`; dialogs in `ViewZoneDialogs` (earlier megafile phase) |
 | Docs: `drawer-audit.md` §3 line counts | **Done** — refreshed after splits |
-| **Phase 2 discipline** | **Done** — `npm run verify:drawers` (non-blocking line-count warn), `ContactUsGalleryPickerDialog`, `RequestFormAssigneesSection`, `AiChatComposer` in `ai-chat/AiChatComposer.tsx`, PR checklist + `docs/drawer-shell-classification.md` |
+| **Phase 2 discipline** | **Done** — `npm run verify:drawers` (non-blocking line-count warn), `ContactUsGalleryPickerDialog`, `RequestFormAssigneesSection`, `AiChatComposer` in `ai-chat/AiChatComposer.tsx`, PR checklist + `docs/audits/drawer-shell-classification.md` |
 | **Phase C burn-down** (orchestration entry files) | **In progress / ongoing** — sections extracted under colocated folders; targets below reflect `verify:drawers` |
 | **`tutorial` DrawerShell compliance** | **Done** — `app/drawers/tutorial.tsx` uses `DrawerShell` + `DrawerScrollArea` on all branches (binary classification rule satisfied). |
 | **Nested entry line warnings** | **Done** — `scripts/drawer-pr-check-warn.mjs` scans `NESTED_ENTRY_FILES` (`explore/index.tsx`, `entry-form/index.tsx`, `view-tree/index.tsx`) alongside top-level `app/drawers/*.tsx`. |
@@ -62,7 +62,7 @@ Focused on **composition** without changing `lib/drawers.ts` entrypoints:
 3. `AiChatSidebar` + `AiChatThread` (presentational; state stays in `ai-chat.tsx`).
 4. `ContactUsThread` + `ContactUsThreadComposer` for the `showThread` branch.
 5. `ViewZoneSpeciesAndServicesSection` after dialogs.
-6. Optional: refresh `docs/drawer-audit.md` §3.
+6. Optional: refresh `docs/audits/drawer-audit.md` §3.
 
 ---
 
@@ -171,7 +171,7 @@ Focused on **composition** without changing `lib/drawers.ts` entrypoints:
 
 ### 6.3 Hygiene
 
-6. Keep **`docs/drawer-audit.md` §3** updated after large PRs (or automate line-count generation in CI as a non-blocking check).
+6. Keep **`docs/audits/drawer-audit.md` §3** updated after large PRs (or automate line-count generation in CI as a non-blocking check).
 7. **`npx tsc --noEmit`** on touched drawers after refactors; smoke-test: Profile billing, View zone, request create/edit, AI chat history, inbox thread.
 
 ---
@@ -189,10 +189,10 @@ Focused on **composition** without changing `lib/drawers.ts` entrypoints:
 
 ## 8. Related docs
 
-- `docs/drawer-audit.md` — registry inventory, file sizes (§3), cross-cutting notes.
-- `docs/DRAWER_PR_CHECKLIST.md` — PR expectations for drawer changes.
-- `docs/drawer-navigation.md` — URL / navigation behavior (referenced from `lib/drawers.ts` header).
-- `docs/drawer-system-current-state.md` — ground-truth audit of registry, Shell adoption, sizes, workflow drawers.
+- `docs/audits/drawer-audit.md` — registry inventory, file sizes (§3), cross-cutting notes.
+- `docs/audits/DRAWER_PR_CHECKLIST.md` — PR expectations for drawer changes.
+- `docs/audits/drawer-navigation.md` — URL / navigation behavior (referenced from `lib/drawers.ts` header).
+- `docs/audits/drawer-system-current-state.md` — ground-truth audit of registry, Shell adoption, sizes, workflow drawers.
 
 ---
 

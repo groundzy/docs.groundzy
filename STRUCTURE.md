@@ -14,6 +14,10 @@ docs/
 │   ├── DEPLOY.md
 │   └── firebase-app-hosting.md
 │
+├── audits/                    # Audits, inventories, drawer PR checklist — see audits/README.md
+├── handoffs/                  # Initiative handoffs — see handoffs/README.md
+├── operations/                # Ops runbooks — see operations/README.md
+│
 ├── architecture/
 │   ├── intelligence-implementation-plan.md  # Phased build: intelligence / alerts / notifications
 │   ├── intelligence/            # Derived events & intelligence layer — see intelligence/FILE-STRUCTURE.md
@@ -95,6 +99,8 @@ docs/
     ├── types-and-stores.md
     ├── dependencies.md
     ├── stripe.md
+    ├── stripe-webhooks.md
+    ├── pricing-reference.md
     └── assets.md
 ```
 

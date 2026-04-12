@@ -98,7 +98,7 @@ export function useWorkflowFormDirty(drawerId: string, isDirty: boolean) {
 | `stores/navigation-store.ts` | `WORKFLOW_DRAWERS`, `workflowFormNavigateAwayRequested`, `discardConfirmOpen` |
 | `app/globals.css` | `body[data-discard-confirm-open="true"] .gz-shell-block-pointer` |
 | `components/work-area/work-area-mobile.tsx` | Scrim / sheet; guards when `discardConfirmOpen` |
-| `docs/drawer-navigation.md` | Product rules for dirty navigation |
+| `docs/audits/drawer-navigation.md` | Product rules for dirty navigation |
 
 **Do not** add another `WorkflowFormDiscardDialog` inside `app/drawers/**` — see `.cursor/rules/workflow-drawers.mdc`.
 

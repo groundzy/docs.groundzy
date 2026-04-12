@@ -21,7 +21,7 @@ Document: Audit of pricing inconsistencies across **auth.groundzy**, **groundzy.
 - [x] `groundzy.com/index.html` — JSON-LD + visible FAQ: team tiers stripped of API/premium/wl/SLA; Enterprise = quote + white-label / dedicated CS; Pro = “workflow”; Identifying Wand = 78,000+ taxa.
 - [x] Other **groundzy.com** pages: `for-homeowners.html`, `for-landscapers.html`, `for-schools.html`, `for-arborists.html`, blog posts — 1,200+ species claims updated (Wand vs Catalog).
 - [x] **auth.groundzy** — `PlanTier` includes `enterprise`; pricing table fifth column; onboarding: Enterprise → address → units → `mailto:` + redirect to app; Stripe unchanged (Enterprise never hits checkout).
-- [x] **app.groundzy** — [docs/PRICING-REFERENCE.md](PRICING-REFERENCE.md) + this file aligned to decisions.
+- [x] **app.groundzy** — [docs/reference/pricing-reference.md](../reference/pricing-reference.md) + this file aligned to decisions.
 
 ---
 
@@ -256,7 +256,7 @@ But `app.groundzy` and `auth.groundzy` do NOT enforce a species cap:
 **Severity:** NICE-TO-HAVE (clarity, not a blocker)
 
 **Action:**
-- If "1.2k species" is a real spec: Add reference in auth.groundzy tier descriptions or add a note in `PRICING-REFERENCE.md`
+- If "1.2k species" is a real spec: Add reference in auth.groundzy tier descriptions or add a note in `docs/reference/pricing-reference.md`
 - If it's approximate/unverified: Soften groundzy.com copy to "Identifies many tree species..." or remove the number
 
 ---
@@ -378,14 +378,14 @@ But `app.groundzy` and `auth.groundzy` do NOT enforce a species cap:
    - Gate: Large Team, Enterprise
 
 4. **If "1.2k species" spec is real:**
-   - Document it in `docs/PRICING-REFERENCE.md`
+   - Document it in `docs/reference/pricing-reference.md`
    - Add reference in tier descriptions or FAQ
    - Keep groundzy.com copy as-is
 
 **Files to update:**
 - `app.groundzy/lib/capabilities.ts`
 - `auth.groundzy/lib/pricing.ts` (PRICING_FEATURE_KEYS)
-- `app.groundzy/docs/PRICING-REFERENCE.md`
+- `app.groundzy/docs/reference/pricing-reference.md`
 
 ---
 

@@ -34,6 +34,24 @@ Documentation for the Groundzy tree-mapping web application. This structure cove
 | [architecture/home-plus-to-pro-teams-linking.md](./architecture/home-plus-to-pro-teams-linking.md) | Foundation: connecting Home/Plus users to Pro/Teams accounts (directory ↔ org, relationships, resolution) |
 | [architecture/quote-external-delivery-and-homeowner-signup.md](./architecture/quote-external-delivery-and-homeowner-signup.md) | Planned: quotes to non-Groundzy clients — SMS/email/PDF/print, QR, tokens, homeowner signup + CRM link |
 
+### Audits & inventories
+
+| Document | Description |
+|----------|-------------|
+| [audits/README.md](./audits/README.md) | Index — drawer audits, repo/pricing audits, PR checklist |
+
+### Handoffs
+
+| Document | Description |
+|----------|-------------|
+| [handoffs/README.md](./handoffs/README.md) | Index — refactor and workflow handoffs |
+
+### Operations
+
+| Document | Description |
+|----------|-------------|
+| [operations/README.md](./operations/README.md) | Index — pricing rollout notes, subscription backfills |
+
 ### App
 
 | Document | Description |
@@ -126,6 +144,8 @@ Documentation for the Groundzy tree-mapping web application. This structure cove
 | [reference/types-and-stores.md](./reference/types-and-stores.md) | Types and stores |
 | [reference/dependencies.md](./reference/dependencies.md) | Dependencies |
 | [reference/stripe.md](./reference/stripe.md) | Stripe |
+| [reference/stripe-webhooks.md](./reference/stripe-webhooks.md) | Stripe webhooks (ops / endpoint checklist) |
+| [reference/pricing-reference.md](./reference/pricing-reference.md) | Cross-repo pricing and tier reference |
 | [reference/assets.md](./reference/assets.md) | Static assets |
 | [reference/service-type-model-spec.md](./reference/service-type-model-spec.md) | ServiceType catalog enums and `ServiceTypeDefinition` (taxonomy spec) |
 
