@@ -87,8 +87,12 @@ Create `.env.local` in the project root for local development. For production (F
 |----------|----------|-------------|
 | `GROUNDZY_INTELLIGENCE_ACTOR_UID` | Yes* | Firebase Auth **user** uid used as `actorUserId` on `groundzy_events` for system-generated `intelligence.*` appends (dedicated service account or bot user). |
 | `GROUNDZY_INTERNAL_CRON_SECRET` | Yes* | Shared secret for `POST /api/internal/intelligence/*` (send as `x-groundzy-internal-secret` or `Authorization: Bearer ...`). |
+| `STORM_INTEL_BATCH_SIZE` | No | Default **150** — max trees per `run-batch` Firestore query (clamped to 1–500 in the API). |
+| `STORM_INTEL_BATCH_MAX_MS` | No | Default **180000** (3 minutes) — soft time budget per batch invocation; stop early so the route stays under hosting limits. The `run-batch` route sets `maxDuration` to **300** seconds (Next.js / Firebase App Hosting). Override per request with JSON body `maxDurationMs` (capped at 290000). |
 
 *Required when calling intelligence append or internal evaluation routes in that environment.
+
+See also: [`storm-intelligence-batch-cron.md`](../groundzy-v3-docs/07-systems/storm-intelligence-batch-cron.md) (batch endpoint, cursor, Cloud Scheduler).
 
 ## Development
 

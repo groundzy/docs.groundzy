@@ -90,9 +90,11 @@ Example conceptual payload:
 {
   "kind": "open_tree",
   "treeId": "t_abc123",
-  "route": "/drawers/view-tree?treeId=t_abc123"
+  "route": "/?drawer=view-tree&treeId=t_abc123"
 }
 ```
+
+**URL shape:** `route` must match **work-area drawer navigation** — `?drawer=…` on the app root (same string as `buildDrawerHref` in `lib/drawer-utils.ts`), **not** `/drawers/<name>` paths. Email deep links use the same query string after `NEXT_PUBLIC_APP_URL` (e.g. `https://app.groundzy.com/?drawer=view-tree&treeId=…`).
 
 **Rule:** Every **intelligence**-originated in-app notification should include **at least one** `actions[]` entry or a documented exception (pure info).
 
