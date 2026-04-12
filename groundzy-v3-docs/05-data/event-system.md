@@ -111,7 +111,9 @@ Storage may use the **same** `groundzy_events` collection with extended `type` e
 ### 4.6 Related documents
 
 - [`intelligence-rules.md`](./intelligence-rules.md) — rule families and severities that feed derived triggers.
+- [`derived-events-payload-schema.md`](./derived-events-payload-schema.md) — normative `intelligence.*` payloads, dedupe, explainability.
 - [`../07-systems/alert-notification-system.md`](../07-systems/alert-notification-system.md) — evaluation → trigger → delivery → workflow (when present).
+- [`../../architecture/intelligence/FILE-STRUCTURE.md`](../../architecture/intelligence/FILE-STRUCTURE.md) — **full markdown manifest** for this layer.
 
 ---
 
@@ -124,7 +126,8 @@ Storage may use the **same** `groundzy_events` collection with extended `type` e
 
 ## 6. Open decisions
 
-- Canonical names and JSON schemas for `intelligence.*`, `weather.*` ingestion, and `notification.*`.
+- **Payload JSON** — draft schemas for `intelligence.*` and optional `notification.*` are in [`derived-events-payload-schema.md`](./derived-events-payload-schema.md); **enum strings** must match [`../../reference/intelligence-event-types.md`](../../reference/intelligence-event-types.md) when implemented.
+- **Weather ingestion** — naming for `weather.*` signals is in [`weather-ingestion-events.md`](./weather-ingestion-events.md).
 - Whether all derived events share **one** Firestore collection with domain events or a **separate** collection with shared envelope shape.
 - Retention and PII for notification-related derived events.
 

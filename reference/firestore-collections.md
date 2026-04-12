@@ -156,7 +156,17 @@ Global admin allowlist. Read: user can check own uid. Write: Admin SDK only.
 
 ### notifications/{notificationId}
 
-System notifications (e.g. Stripe). Fields: `userId`, `read`, etc. Create: backend only.
+System notifications (Stripe, **intelligence** alerts, etc.). **Create:** backend only (`firebase/firestore.rules`).
+
+Typical fields: `userId`, `type`, `title`, `message`, `read`, `createdAt`. **Intelligence** rows may also include: `channel` (`app` \| `email` \| `sms`), `severity` (`info` \| `recommendation` \| `warning` \| `critical`), `sourceEventId` (links to `groundzy_events`), `organizationId`, `actions` (array of `{ kind, treeId?, route? }`), `dedupeKey`.
+
+### groundzy_events/{eventId}
+
+Append-only v3 event log (workflow, tree timeline, **intelligence**). **Client:** read/write denied; writes via Admin SDK / server routes only.
+
+### groundzy_event_idempotency/{id}
+
+Dedupe keys for event appends (user commands and **namespaced** `intel:…` keys for intelligence).
 
 ### mail/{mailId}
 

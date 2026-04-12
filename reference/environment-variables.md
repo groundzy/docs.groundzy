@@ -81,6 +81,15 @@ Create `.env.local` in the project root for local development. For production (F
 | `RESEND_API_KEY` | No | Resend API key (transactional emails) |
 | `RESEND_FROM_EMAIL` | No | From email (default: Groundzy &lt;noreply@app.groundzy.com&gt;) |
 
+## Intelligence & internal jobs (server)
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GROUNDZY_INTELLIGENCE_ACTOR_UID` | Yes* | Firebase Auth **user** uid used as `actorUserId` on `groundzy_events` for system-generated `intelligence.*` appends (dedicated service account or bot user). |
+| `GROUNDZY_INTERNAL_CRON_SECRET` | Yes* | Shared secret for `POST /api/internal/intelligence/*` (send as `x-groundzy-internal-secret` or `Authorization: Bearer ...`). |
+
+*Required when calling intelligence append or internal evaluation routes in that environment.
+
 ## Development
 
 | Variable | Required | Description |

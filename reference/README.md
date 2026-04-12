@@ -17,3 +17,5 @@ Technical reference for APIs, config, and data.
 | [assets.md](./assets.md) | Static assets |
 | [tree-service-taxonomy.md](./tree-service-taxonomy.md) | Master taxonomy of tree/arbor services for modeling ServiceType, WorkItem, templates, and plans |
 | [service-type-model-spec.md](./service-type-model-spec.md) | ServiceType enums, `ServiceTypeId`, `ServiceTypeDefinition`, example `SERVICE_CATALOG` |
+| [intelligence-event-types.md](./intelligence-event-types.md) | `intelligence.*` and weather ingestion event names (sync with code) |
+| [notification-types.md](./notification-types.md) | In-app notification `type` union (evolving) |

@@ -9,6 +9,8 @@ Detailed documentation for each major feature in Groundzy.
 | [dashboard.md](./dashboard.md) | Dashboard overview, quick actions, health summary, weather card, upcoming, limits |
 | [trees.md](./trees.md) | Trees (Map Items), add/view/edit, species, quick picks, history, media |
 | [weather.md](./weather.md) | Weather conditions, timeline, tree impact, recommendations |
+| [intelligence-alerts.md](./intelligence-alerts.md) | System-driven alerts (weather × tree × workflow); product overview |
+| [notification-center.md](./notification-center.md) | Notification timeline UX (filters, explainability, actions) |
 | [ai.md](./ai.md) | AI Wizard, species identification, AI Chat (Gemini) |
 | [crm.md](./crm.md) | Clients, properties, requests, quotes, jobs, invoices |
 | [map-and-zones.md](./map-and-zones.md) | Map, tools, filters, draw zones, measure, zones |

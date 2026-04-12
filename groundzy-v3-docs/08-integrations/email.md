@@ -24,6 +24,18 @@
 | **Deliverability** | Depends on Resend reputation, SPF/DKIM as configured in Resend dashboard |
 | **Scope** | Not a full marketing automation suite — transactional only in surveyed module |
 
+## Intelligence / digest (planned)
+
+When **email** is used for **non-transactional** intelligence (daily/weekly digests, storm summaries):
+
+- Route through the same **routing** and **preferences** layer as in-app alerts — see [`../07-systems/delivery-preferences-and-routing.md`](../07-systems/delivery-preferences-and-routing.md).
+- Respect **tier** — see [`../09-business/intelligence-tier-matrix.md`](../09-business/intelligence-tier-matrix.md).
+- Use **unsubscribe** links and store consent consistent with Resend and product policy.
+
+Implementation may extend `lib/email.ts` or add a dedicated digest module; document new env vars in [`../../reference/environment-variables.md`](../../reference/environment-variables.md) when added.
+
+---
+
 ## Related
 
 - `pro_contact_requests` / Cloud Functions may send **other** emails — verify `firebase/functions` or server code if present outside `lib/email.ts`

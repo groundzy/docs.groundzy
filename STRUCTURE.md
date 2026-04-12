@@ -15,6 +15,10 @@ docs/
 │   └── firebase-app-hosting.md
 │
 ├── architecture/
+│   ├── intelligence-implementation-plan.md  # Phased build: intelligence / alerts / notifications
+│   ├── intelligence/            # Derived events & intelligence layer — see intelligence/FILE-STRUCTURE.md
+│   │   ├── README.md
+│   │   └── FILE-STRUCTURE.md   # Full md manifest (existing v3 docs + gaps)
 │   ├── project-structure-current.md
 │   ├── complete-architecture-documentation.md
 │   └── visibility-permission-model-v2.md
@@ -67,6 +71,8 @@ docs/
 │   ├── dashboard.md
 │   ├── trees.md
 │   ├── weather.md
+│   ├── intelligence-alerts.md
+│   ├── notification-center.md
 │   ├── ai.md
 │   ├── crm.md
 │   ├── map-and-zones.md
@@ -81,6 +87,8 @@ docs/
     ├── README.md
     ├── api-routes.md
     ├── environment-variables.md
+    ├── intelligence-event-types.md
+    ├── notification-types.md
     ├── firestore-collections.md
     ├── firestore-indexes.md
     ├── storage-rules.md
