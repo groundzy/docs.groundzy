@@ -31,7 +31,7 @@ From **`lib/utils/tier-utils.ts`:**
 ## 3. Drawer and feature gates (client)
 
 - **`visibleForTiers`** on drawer metadata (`lib/drawers.ts`, `lib/drawer-registry.ts`) — controls which **drawers** appear.
-- **Hooks:** `useProOrTeamsAccess`, `useTeamsOnlyAccess`, `useIsPlusOnlyProperties`, etc. — feature-specific.
+- **Hooks:** `useProOrTeamsAccess`, `useTeamsOnlyAccess` (`workflow.pipeline` for Pro + teams), `useIsPlusOnlyProperties`, etc. — feature-specific.
 
 **Firestore rules** generally use **organization membership**, **databaseCode**, **tree permissions**—**not** subscription tier strings. **Security** must not rely on client-only tier checks.
 
@@ -49,7 +49,7 @@ From **`lib/utils/tier-utils.ts`:**
 
 | Case | Behavior |
 |------|----------|
-| **Plus** | Yearly Stripe path (`lib/stripe-config.ts`); **does not** unlock Pro **clients/properties** drawers—those are **`Pro` + team tiers** only (`lib/drawers.ts`, `clients-properties`). Plus sits between Home and Pro for **limits and upgrade path**, not CRM. |
+| **Plus** | Yearly Stripe path (`lib/stripe-config.ts`); **does not** unlock Pro **clients/properties** drawers—those are **`Pro` + team tiers** only (`lib/drawers.ts`, `clients-properties`). Plus sits between Home and Pro for **limits and upgrade path**, not CRM. **Workflow** (requests/quotes/jobs/invoices) is **Pro + team tiers**, not Plus (`lib/drawers.ts` `WORKFLOW_TIERS`, `lib/capabilities.ts`). |
 | **Hire a Pro** | Shown for **Home/Plus**, hidden for **Pro/Teams** (`docs/features/hire-pro.md`) — revenue vs positioning choice |
 | **Enterprise** | Placeholder pricing null in struct; may map to Large Team price in `getTeamTierName` for Stripe (`stripe-config.ts` comment) |
 
