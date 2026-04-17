@@ -1,0 +1,16 @@
+stripe price id's
+
+plus m: price_1TIcHBHrFcfDYHeLpWhixHqy
+plus y: price_1TIcIBHrFcfDYHeL3DFeMsWy
+
+pro m: price_1Sr1YCHrFcfDYHeLIIWc0NE2
+pro y: price_1TIcKBHrFcfDYHeLBHhdnagJ
+
+small team m: price_1Sr1YDHrFcfDYHeL4YqJChFv
+small team y: price_1TIcLOHrFcfDYHeLoydl6nwL
+
+mid team m: price_1Sr1YDHrFcfDYHeLbYfapW2z
+mid team y: price_1TIcM4HrFcfDYHeLPXjB568I
+
+large team m: price_1Sr1YEHrFcfDYHeLWkOQsfHS
+large team y: price_1TIcMOHrFcfDYHeLiwCRIEhj

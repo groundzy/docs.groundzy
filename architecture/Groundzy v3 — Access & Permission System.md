@@ -60,7 +60,8 @@ type AccessActor = {
 
   orgMemberships: Array<{
     organizationId: string;
-    role: "owner" | "admin" | "manager" | "member";
+    /** Aligns with `TeamRole` in product types — includes read-only org members (`viewer`). */
+    role: "owner" | "admin" | "manager" | "member" | "viewer";
   }>;
 
   principalKeys: string[]; // uid:, org:, email:

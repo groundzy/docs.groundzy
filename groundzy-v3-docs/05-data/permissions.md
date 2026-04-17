@@ -2,6 +2,8 @@
 
 **Authoritative** access control for direct Firestore reads/writes: **`firebase/firestore.rules`**. **Subscription tier** (Home, Plus, Pro, Teams) is enforced primarily in **app code** (`lib/utils/tier-utils.ts`, `lib/drawers.ts`) and **user/team subscription fields**, not as a single `tier` field in every rule match.
 
+**Organization roles (v3):** [System definition — roles in the access model](./organization-roles-and-access.md) · [OrgAction policy matrix](./org-action-policy-matrix.md) · [Teams & roles — implementation audit](../features/teams-and-roles-overview.md).
+
 ---
 
 ## Execution order (authority)
@@ -89,4 +91,5 @@ Rules use **owner/admin** for elevated team operations; finer roles may be parti
 
 - [`relationships.md`](./relationships.md)
 - [`data-model-overview.md`](./data-model-overview.md)
+- [`organization-roles-and-access.md`](./organization-roles-and-access.md), [`org-action-policy-matrix.md`](./org-action-policy-matrix.md), [`teams-and-roles-overview.md`](../features/teams-and-roles-overview.md)
 - `lib/utils/tier-utils.ts`, `firebase/firestore.rules`

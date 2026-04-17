@@ -10,5 +10,6 @@ Third-party services Groundzy depends on. Full env list: [`docs/reference/enviro
 | [ai-services.md](./ai-services.md) | Gemini, PlantNet, weather APIs, Places |
 | [email.md](./email.md) | Resend transactional email |
 | [sms-intelligence-delivery.md](./sms-intelligence-delivery.md) | SMS channel for intelligence (planned; consent, tiers, limits) |
+| [bouncie.md](./bouncie.md) | Fleet GPS / telematics (planned; OAuth, webhooks; **full spec:** [`../../bouncie/README.md`](../../bouncie/README.md)) |
 
 **Goal:** Clear **dependencies**, **connection points**, and **risks** for operations and v3 planning.
