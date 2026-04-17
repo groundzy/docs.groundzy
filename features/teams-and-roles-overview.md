@@ -57,9 +57,11 @@ New teams set `settings.defaultPermissions` to **`'view'`** at creation, so **in
 
 ## 3. Role permissions in the app (UI / client policy helpers)
 
+**Implemented (normative matrix):** `lib/groundzy/policy/org-action.ts` (`OrgAction`, `orgRoleAllows`) — **`lib/permissions-utils.ts`** delegates **`getPermissionsForRole`** to that matrix.
+
 **File:** `app/lib/permissions-utils.ts`
 
-This module defines **`RolePermissions`** (trees, properties, clients, jobs, quotes, invoices, requests CRUD flags plus `inviteMembers`, `changeRoles`, `removeMembers`, `teamSettings`, `billing`) and maps each **`TeamRole`** to a matrix.
+This module defines **`RolePermissions`** (trees, properties, clients, jobs, quotes, invoices, requests CRUD flags plus `inviteMembers`, `changeRoles`, `removeMembers`, `teamSettings`, `billing`) and maps each **`TeamRole`** to the matrix.
 
 **Summary:**
 
@@ -93,14 +95,17 @@ This module defines **`RolePermissions`** (trees, properties, clients, jobs, quo
 
 ## 5. Firestore security rules vs app roles
 
-**File:** `app/firebase/firestore.rules`
+**File:** `firebase/firestore.rules`
 
-- **`isInTeam(teamId)`** uses **`users.organizationId == teamId`** — any org member passes, **not** “role at or above X”.
-- **`isOwnerOrAdmin(teamId)`** = in team **and** `user.role` in **`['owner','admin']`**.
+- **`isInTeam(teamId)`** still means **`users.organizationId == teamId`** — used for **reads** and workflows where membership alone is intended.
+- **Phase D (CRM / trees alignment):** team-path **writes** on **`trees`**, **`properties`**, **`clients`**, **`zones`**, **`tree_number_counters`**, **`workflow_sequence_counters`** use **`teamOrgMutateMemberPlus`** / **`teamOrgMutateManagerPlus`** (`hasRole` on **`users.role`**) so **viewers** cannot mutate org-scoped CRM via membership alone (mirrors **`orgRoleAllows`** for create/update/delete). Solo paths (**`organizationId == request.auth.uid`**, **`databaseCode`**, **`tree_permissions`**) are unchanged.
+- **`isOwnerOrAdmin(teamId)`** = in team **and** `user.role` in **`['owner','admin']`** (team admin operations).
 
 Team document **updates** are allowed for `isOwnerOrAdmin` **or** team `ownerId` **or** `memberRoles[uid] == 'admin'` (redundant paths for edge cases).
 
-**Implication:** **Manager**, **member**, and **viewer** are **not** treated as elevated in rules the way **owner/admin** are. Finer CRM/workflow constraints for those roles rely on **app logic** (`permissions-utils`, server routes, and the v3 access work) and on **tree / work_item** rules — not on a distinct “manager” branch in `firestore.rules` for the `teams` collection.
+**Server mutations (Admin SDK bypass):** tree routes gate team-scoped sharing/archive/transfer/grants with **`assertOrgRoleAllows`** / **`canOrgOrTreeAction`** (`lib/groundzy/policy/assert-org-role.ts`, `lib/groundzy/policy/tree-collaborator.ts`). **Peer admin** rules (**admin cannot change another admin**) live in **`lib/groundzy/policy/team-admin-peer-rule.ts`** and **`app/actions/team.ts`** — **after** membership gates, not via **`orgRoleAllows`** alone.
+
+**Staging before tightening workflow rules:** validate **viewer** (same-org non-participant vs participant), **member**, **admin** on staging; watch **`[workflow/participant-get] access denied`** logs for **`reason`** (`forbidden` vs **`no_relationship`**).
 
 ---
 
@@ -108,7 +113,7 @@ Team document **updates** are allowed for `isOwnerOrAdmin` **or** team `ownerId`
 
 | Doc | Alignment |
 |-----|-----------|
-| `docs/groundzy-v3-docs/05-data/permissions.md` | States **`TeamRole`** includes **viewer**; notes **staff → member** mapping; flags **user.role** vs **team.memberRoles** as two sources to keep consistent. |
+| `docs/groundzy-v3-docs/05-data/permissions.md` | §6 inconsistency table updated for **OrgAction / Phase D** — **`user.role`** vs **`memberRoles`** drift is **logged** when **`teams/{orgId}`** is loaded on workflow reads (`lib/groundzy/policy/team-role-invariant.ts`). |
 | `docs/features/share-and-teams.md` | Lists roles as **owner, admin, manager, member** — **omits viewer** (drift vs `TeamRole`). |
 | `docs/architecture/Groundzy v3 — Access & Permission System.md` | **`AccessActor.orgMemberships[].role`** only lists **`owner \| admin \| manager \| member`** — **no viewer** in the typed actor model (planned taxonomy gap vs product types). |
 | `docs/architecture/visibility-permission-model-v2.md` | Describes **team role inheritance** vs **tree_permission** precedence for trees — orthogonal but related to org roles. |

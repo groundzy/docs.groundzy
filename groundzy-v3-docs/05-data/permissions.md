@@ -40,7 +40,7 @@ From **`firestore.rules`** helpers:
 ## 2. Team roles (product)
 
 `TeamRole`: **owner**, **admin**, **manager**, **member**, **viewer** (`types/team.ts`).  
-Rules use **owner/admin** for elevated team operations; finer roles may be partially enforced in app UI.
+Rules use **owner/admin** for elevated **team document** operations; **viewer vs member+** on org-scoped **CRM / trees** writes is enforced in **`firestore.rules`** (Phase D helpers) and overlapping server tree routes — see **`permissions-utils` / `org-action.ts`** for the product matrix.
 
 ---
 
@@ -79,11 +79,11 @@ Rules use **owner/admin** for elevated team operations; finer roles may be parti
 
 ## 6. Inconsistencies to resolve in v3
 
-| Issue | Detail |
+| Issue | Status |
 |-------|--------|
-| **Tier vs org rules** | Tier is **commercial**; Firestore rules use **membership** and **tree permissions**—document the matrix for engineers. |
-| **Role field** | `user.role` vs `team.memberRoles` — two sources for role semantics. |
-| **work_items** | Complex `workItemSharedAccess` — caps tree list length in helper (see rules) — potential edge cases for many `treeIds`. |
+| **Tier vs org rules** | **Documented:** matrix in **`org-action-policy-matrix.md`**; CRM/trees Phase D rules align **viewer vs member+** on team-path writes (`firebase/firestore.rules` helpers **`teamOrgMutateMemberPlus`** / **`teamOrgMutateManagerPlus`**). Workflow collections still use **`workflowTeamAccess`** / participant index rules — tighten only after staging metrics (see **`teams-and-roles-overview.md`** §5). |
+| **Role field** | **App:** optional drift **log** when **`teams/{orgId}`** is available — **`logTeamMemberRoleDriftIfAny`** (`lib/groundzy/policy/team-role-invariant.ts`) from workflow participant pipeline. **Repair** job remains optional if logs show drift. |
+| **work_items** | **Unchanged:** complex `workItemSharedAccess` — caps `treeIds` list length in rules helper; edge cases for large lists still a product/rules follow-up. |
 
 ---
 
