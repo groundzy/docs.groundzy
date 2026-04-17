@@ -11,6 +11,7 @@ Commercial pipeline: **Request** (lead) → **Quote** → **Job** → **Invoice*
 ## Data involved
 
 - Collections: `requests`, `quotes`, `jobs`, `invoices` (`types/*.ts`).
+- **Statuses:** Persist **stored** enums on each document (`snake_case`). **Time-relative** presentation (e.g. job “Overdue”, invoice “Past due”) is **derived** in app code (`app/lib/workflow/workflow-status.ts`), not nightly status rewrites—see `docs/features/workflow-status-redesign-spec.md` (appendix).
 - **Team workflow settings:** embedded on **`teams/{teamId}.workflowSettings`** (`getTeamWorkflowSettings` in `lib/firebase/firestore.ts`).
 - **`work_items`:** `workflow_*` mirror kinds + optional `workItemIds` on CRM docs (`types/work-item.ts`).
 - **Conversion fields:** `convertedToQuoteId`, `convertedToJobId`, etc., on entities.

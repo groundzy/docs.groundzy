@@ -2,6 +2,8 @@
 
 > **Document purpose**: Definitive documentation of the Request → Quote → Job → Invoice workflow as currently implemented in the codebase. Evidence-based, no speculation.
 
+> **Update (April 2026):** CRM **status** strings and **stored vs derived** rules are defined in the app (`types/*.ts`, `lib/workflow/workflow-status.ts`) and in [`workflow-status-redesign-spec.md`](./workflow-status-redesign-spec.md) (appendix). Treat the **status model** table below as **historical context**; confirm against source when auditing behavior.
+
 ---
 
 ## 1. Executive Summary
@@ -16,12 +18,12 @@ The Groundzy workflow system provides a four-stage pipeline for tree care servic
 
 ## 2. Workflow Overview
 
-| Stage   | Entity  | Collection | Status model                         |
+| Stage   | Entity  | Collection | Status model (stored on `status`)    |
 |---------|---------|------------|--------------------------------------|
-| Request | Request | `requests` | new, contacted, quoted, approved, scheduled, completed, declined, cancelled |
-| Quote   | Quote   | `quotes`   | draft, sent, viewed, accepted, declined, expired, converted |
-| Job     | Job     | `jobs`     | draft, scheduled, confirmed, in_progress, on_hold, completed, cancelled, requires_invoicing |
-| Invoice | Invoice | `invoices` | draft, sent, viewed, partial_payment, paid, overdue, cancelled |
+| Request | Request | `requests` | See `RequestStatus` in `types/request.ts` (includes e.g. `converted`, `archived`). |
+| Quote   | Quote   | `quotes`   | `draft`, `awaiting_response`, `approved`, `changes_requested`, `converted`, `archived`, `declined` |
+| Job     | Job     | `jobs`     | `unscheduled`, `scheduled`, `action_required`, `requires_invoicing`, `archived` |
+| Invoice | Invoice | `invoices` | `draft`, `awaiting_payment`, `paid`, `bad_debt` |
 
 **Relationship model**:
 - Quote: `requestId?` → Request
