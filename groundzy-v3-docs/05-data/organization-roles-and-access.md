@@ -231,6 +231,7 @@ Legacy pattern: large client **role → boolean matrix** without server check. *
 
 - Tighten rules for **specific collections** where **viewer** must not write—**only** after server paths are verified and metrics show no legitimate client dependency on old behavior.
 - **Do not** remove **dual write** of `users.role` until rules no longer depend on it **or** rules are updated to read team doc via **get()** where performance allows (tradeoff: rule complexity / cost).
+- **Workflow collections** (`requests`, `quotes`, `jobs`, `invoices`): non-participant reads on **team-owned** docs require **`member`+** via **`hasRole`** (see `workflowTeamOrgWorkflowRead` in `firebase/firestore.rules`), matching **`teamOrgWorkflowReadDenied`** / **`evaluateWorkflowDocumentRead`** in the app. **Unchanged:** participant principal reads, solo org (`organizationId === uid`), **`databaseCode`** alignment, global admin.
 
 ### Compatibility guarantees
 
