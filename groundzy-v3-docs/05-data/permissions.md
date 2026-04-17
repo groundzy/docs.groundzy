@@ -1,6 +1,8 @@
 # Permissions & access
 
-**Authoritative** access control for direct Firestore reads/writes: **`firebase/firestore.rules`**. **Subscription tier** (Home, Plus, Pro, Teams) is enforced primarily in **app code** (`lib/utils/tier-utils.ts`, `lib/drawers.ts`) and **user/team subscription fields**, not as a single `tier` field in every rule match.
+**v3 unified model (locked):** [Unified permission model (v3)](./unified-permission-model-v3.md) — **reads** = coarse Firestore rules + optional server loaders; **writes** = server-authoritative policy (`orgRoleAllows`, `canOrgOrTreeAction`, workflow gates). Rules are **not** a full duplicate of composed org + tree + workflow logic.
+
+**Direct Firestore:** **`firebase/firestore.rules`** bound what the client can read/write without Admin SDK. **Subscription tier** (Home, Plus, Pro, Teams) is enforced primarily in **app code** (`lib/utils/tier-utils.ts`, `lib/drawers.ts`) and **user/team subscription fields**, not as a single `tier` field in every rule match.
 
 **Organization roles (v3):** [System definition — roles in the access model](./organization-roles-and-access.md) · [OrgAction policy matrix](./org-action-policy-matrix.md) · [Teams & roles — implementation audit](../features/teams-and-roles-overview.md).
 
@@ -12,12 +14,12 @@ When layers conflict, **this is the resolution order** (same story everywhere in
 
 | Order | Layer | Role |
 |-------|--------|------|
-| 1 | **Firestore security rules** | **Hard security.** Deny unsafe reads/writes regardless of what the UI shows. Client cannot override. |
-| 2 | **Org / team membership & roles** | Who may act **inside** an organization (`organizationId`, `user.role`, `teams.memberRoles`, etc.). |
+| 1 | **Firestore security rules** | **Coarse hard boundary** on **reads** (membership, participant index, collaborator status, solo/dbCode paths). On **writes**, rules are a **safety net** while **composed** policy (org + tree + participant) lives on the **server** for authoritative mutations — see [unified-permission-model-v3.md](./unified-permission-model-v3.md) §1. |
+| 2 | **Org / team membership & roles** | Who may act **inside** an organization. **Canonical role:** `teams.memberRoles[uid]`; **`users.role`** is cache — see [organization-roles-and-access.md](./organization-roles-and-access.md) §2. |
 | 3 | **Subscription tier (effective)** | **Product entitlements:** limits, which **features/drawers** exist (`getEffectiveSubscriptionTier`, `visibleForTiers`). **Not** a substitute for (1). |
 | 4 | **UI** | Visibility, empty states, upsell—**never** described as the security boundary. |
 
-**Implication:** A user may **see** a tier-gated drawer only if rules **also** allow the underlying data access; tier alone does not secure data.
+**Implication:** A user may **see** a tier-gated drawer only if rules **also** allow the underlying data access; tier alone does not secure data. **Mutations** that depend on **full** org-role composition **must** go through server-validated paths (API / Admin SDK); do not rely on Security Rules alone for those matrices.
 
 ---
 
@@ -77,13 +79,17 @@ Rules use **owner/admin** for elevated **team document** operations; **viewer vs
 
 ---
 
-## 6. Inconsistencies to resolve in v3
+## 6. Inconsistencies — resolved posture (v3)
 
-| Issue | Status |
-|-------|--------|
-| **Tier vs org rules** | **Documented:** matrix in **`org-action-policy-matrix.md`**; CRM/trees Phase D rules align **viewer vs member+** on team-path writes (`firebase/firestore.rules` helpers **`teamOrgMutateMemberPlus`** / **`teamOrgMutateManagerPlus`**). Workflow collections still use **`workflowTeamAccess`** / participant index rules — tighten only after staging metrics (see **`teams-and-roles-overview.md`** §5). |
-| **Role field** | **App:** optional drift **log** when **`teams/{orgId}`** is available — **`logTeamMemberRoleDriftIfAny`** (`lib/groundzy/policy/team-role-invariant.ts`) from workflow participant pipeline. **Repair** job remains optional if logs show drift. |
-| **work_items** | **Unchanged:** complex `workItemSharedAccess` — caps `treeIds` list length in rules helper; edge cases for large lists still a product/rules follow-up. |
+| Issue | Resolution |
+|-------|------------|
+| **Reads vs writes / rule drift** | **Locked:** [unified-permission-model-v3.md](./unified-permission-model-v3.md) §1 — **writes** are **server-authoritative** for composed policy; **reads** use **coarse** rules (+ server access envelopes where implemented). Do not attempt full matrix parity in Security Rules for composition-heavy paths. |
+| **Tier vs org rules** | CRM/trees Phase D uses **`teamOrgMutateMemberPlus`** / **`teamOrgMutateManagerPlus`** in **`firebase/firestore.rules`**. Workflow collections use **`workflowTeamAccess`** / participant reads; **narrow client writes** over time per unified model; staging metrics remain useful before tightening legacy client paths (`teams-and-roles-overview.md` §5). |
+| **`users.role` vs `teams.memberRoles`** | **`teams.memberRoles`** is canonical; **`users.role`** is cache — transactional updates required; drift = bug; **`logTeamMemberRoleDriftIfAny`** (`lib/groundzy/policy/team-role-invariant.ts`); optional background repair — [organization-roles-and-access.md](./organization-roles-and-access.md) §2, [unified-permission-model-v3.md](./unified-permission-model-v3.md) §2. |
+| **work_items / recurring_plans thresholds** | **Classified:** **system-class** indices vs **CRM-class** entities — delete bars differ **by design** ([unified-permission-model-v3.md](./unified-permission-model-v3.md) §4). **`work_items`** shared-tree list caps in rules remain a separate edge-case follow-up. |
+| **Collaborator vs org UX** | **Guidelines:** [collaborator-org-role-ux.md](../features/collaborator-org-role-ux.md) — always **Org:** vs **On this tree:** labels. |
+
+**Implementation inventory:** [role-capabilities-matrix.md](../features/role-capabilities-matrix.md) maps capabilities to this posture (reads vs server writes).
 
 ---
 

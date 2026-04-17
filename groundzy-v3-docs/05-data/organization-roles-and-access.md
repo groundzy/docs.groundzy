@@ -4,7 +4,7 @@
 **Purpose:** Define how **organization (team) roles** integrate into the Groundzy v3 **access model**—policy-first, server-authoritative, event-oriented—so engineering can implement **without** inferring semantics from legacy UI helpers or duplicated Firestore fields.  
 **Audience:** Backend, client, rules, and security reviewers.
 
-**Related:** Audited codebase summary: [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md). **Concrete policy:** [`org-action-policy-matrix.md`](./org-action-policy-matrix.md). Also: [`permissions.md`](./permissions.md), [`relationships.md`](./relationships.md), [`../../architecture/Groundzy v3 — Access & Permission System.md`](../../architecture/Groundzy%20v3%20—%20Access%20%26%20Permission%20System.md).
+**Related:** **[Unified permission model (v3) — locked decisions](./unified-permission-model-v3.md)** (reads vs writes, canonical role, mental model, examples). Audited codebase summary: [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md). **Concrete policy:** [`org-action-policy-matrix.md`](./org-action-policy-matrix.md). Also: [`permissions.md`](./permissions.md), [`relationships.md`](./relationships.md), [`../../architecture/Groundzy v3 — Access & Permission System.md`](../../architecture/Groundzy%20v3%20—%20Access%20%26%20Permission%20System.md).
 
 ---
 
@@ -118,7 +118,7 @@ This section **normatively** aligns org roles with the v3 stack. **Tier is not a
 | Order | Layer | What happens | Where org role applies |
 |------|--------|----------------|-------------------------|
 | **1** | **Authentication** | Reject if not signed in (or invalid server session). | N/A |
-| **2** | **Hard boundaries (Firestore security rules + server that enforces mutations)** | Deny structurally unsafe reads/writes. Rules use **membership** (`organizationId`) and coarse **elevated team** checks (`owner`/`admin` in **derived** `users.role`); they do **not** encode the full org matrix. | **Coarse:** e.g. who may update **`teams`** document. Full **viewer vs member** distinctions for sensitive collections **MUST** be enforced in **server handlers** or **tightened rules** per migration (§8). |
+| **2** | **Hard boundaries (Firestore reads + server mutations)** | **Reads:** Security Rules enforce **coarse** membership/participant/collaborator boundaries. **Writes:** **Server-authoritative** composed policy for org + tree + workflow (`orgRoleAllows`, `canOrgOrTreeAction`, workflow gates); Rules are **not** the full matrix — see [**unified-permission-model-v3.md** §1](./unified-permission-model-v3.md). Derived **`users.role`** used in rules for Phase D helpers; canonical role remains **`teams.memberRoles`**. |
 | **3** | **Resource relationship** | Determine how the actor relates to the **specific** record (org owner, participant, assignee, `tree_permissions` collaborator, public read, etc.). | Establishes **whether** org role is relevant (org-scoped resource vs share-only). |
 | **4** | **Policy** `can(actor, action, resource)` | Combine **AccessActor** (includes **canonical org role**), relationship, and action. | **Primary** place where **viewer / manager / member** distinctions are expressed for org-scoped behavior. |
 | **5** | **Entitlements (effective subscription tier)** | Gate **global** product capabilities (which modules exist, pipeline availability by tier rules). | **Cannot** grant org admin powers; **can** hide entire surfaces (e.g. CRM) if tier disallows. |

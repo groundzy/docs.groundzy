@@ -2,7 +2,7 @@
 
 **Status:** Normative (v3)  
 **Purpose:** Define the **complete, closed** `OrgAction` vocabulary and **authoritative** `TeamRole → OrgAction` mapping so engineers implement **one** policy module without inventing string literals or duplicating matrices.  
-**Depends on:** [`organization-roles-and-access.md`](./organization-roles-and-access.md), [`permissions.md`](./permissions.md).
+**Depends on:** [`organization-roles-and-access.md`](./organization-roles-and-access.md), [`permissions.md`](./permissions.md), [**unified-permission-model-v3.md**](./unified-permission-model-v3.md) (locked reads/writes posture, evaluation examples).
 
 **← Audited state:** [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md) (what the codebase does today).
 

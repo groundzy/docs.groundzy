@@ -2,7 +2,7 @@
 
 This document summarizes **what exists today** in the Groundzy app for **teams** (org subscriptions) and **team roles**, and how that lines up with **architecture docs** and **known gaps**. It is derived from the codebase under `C:\Groundzy\app` and docs under `C:\Groundzy\docs` (as of the analysis date).
 
-**→ v3 (normative):** [Organization roles & access](../groundzy-v3-docs/05-data/organization-roles-and-access.md) → [OrgAction policy matrix](../groundzy-v3-docs/05-data/org-action-policy-matrix.md) (implementable `OrgAction` contract).
+**→ v3 (normative):** [Unified permission model (v3)](../groundzy-v3-docs/05-data/unified-permission-model-v3.md) · [Organization roles & access](../groundzy-v3-docs/05-data/organization-roles-and-access.md) · [OrgAction policy matrix](../groundzy-v3-docs/05-data/org-action-policy-matrix.md). **UX:** [Collaborator & org role UX](./collaborator-org-role-ux.md).
 
 ---
 
@@ -12,7 +12,7 @@ This document summarizes **what exists today** in the Groundzy app for **teams**
 |------|-------------|
 | **Tiers** | Small Team, Mid Team, Large Team, Enterprise — seat caps come from `@groundzy/pricing` (`TEAM_BAND_MAX_MEMBERS`, `ENTERPRISE_MAX_MEMBERS` in `packages/pricing/src/team-seats.ts`). |
 | **Team document** | Firestore `teams/{teamId}`: `name`, `ownerId`, `ownerEmail`, `members` (UID array), `memberRoles` (UID → role), `settings`, `tier`, subscription fields, `logoURL`, flags like `isActive` / `isDeleted`. |
-| **User membership** | `users/{uid}.organizationId` = team id; `users/{uid}.role` = the user’s **canonical** `TeamRole` (kept in sync with `teams.memberRoles` for that user). |
+| **User membership** | `users/{uid}.organizationId` = team id. **Canonical role** is **`teams.memberRoles[uid]`**; **`users.role`** is a **derived cache** kept in transactional lockstep ([unified-permission-model-v3.md §2](../groundzy-v3-docs/05-data/unified-permission-model-v3.md)). |
 | **Invites** | `invite_codes` collection; server actions create/revoke/regenerate codes (`app/actions/team.ts`). **`POST /api/invite-code/validate`** validates codes for joining. |
 | **Beta / ops** | **`POST /api/teams/create-free-beta`** creates teams for beta flows (referenced in internal docs). |
 | **Stripe** | Team creation from checkout uses `createTeam` / `createTeamForWebhook` (`app/actions/team.ts`) after subscription; team links to Stripe via `subscriptionId`, `subscriptionStatus`, etc. |
@@ -95,6 +95,8 @@ This module defines **`RolePermissions`** (trees, properties, clients, jobs, quo
 
 ## 5. Firestore security rules vs app roles
 
+**Architecture (v3 locked):** [unified-permission-model-v3.md §1](../groundzy-v3-docs/05-data/unified-permission-model-v3.md) — **reads** use **coarse** rules; **composed mutations** are **server-authoritative** (policy modules), not fully duplicated in Security Rules.
+
 **File:** `firebase/firestore.rules`
 
 - **`isInTeam(teamId)`** still means **`users.organizationId == teamId`** — used for **reads** and workflows where membership alone is intended.
@@ -124,7 +126,7 @@ Team document **updates** are allowed for `isOwnerOrAdmin` **or** team `ownerId`
 ## 7. Planned / architectural direction (from docs)
 
 1. **Single permission story:** v3 docs push **`Actor + Resource + Action → Policy`** and warn that **UI must not invent access logic** (`Groundzy v3 — Access & Permission System.md`).
-2. **Unify role sources:** Resolve tension between **`users.role`** and **`teams.memberRoles`** explicitly in engineering guidelines (`permissions.md` “Inconsistencies to resolve”).
+2. **Unify role sources:** **`teams.memberRoles`** canonical, **`users.role`** cache — see [unified-permission-model-v3.md §2](../groundzy-v3-docs/05-data/unified-permission-model-v3.md); [`permissions.md` §6](../groundzy-v3-docs/05-data/permissions.md) posture.
 3. **`viewer` in `AccessActor`:** The canonical access doc now includes **`viewer`** in **`orgMemberships.role`** — implement policy and loaders accordingly ([`Groundzy v3 — Access & Permission System.md`](../architecture/Groundzy%20v3%20—%20Access%20%26%20Permission%20System.md) §3).
 4. **Firestore vs UI:** “Finer roles may be partially enforced in app UI” (`permissions.md`) — closing that gap means either **rules** that understand manager/member/viewer for sensitive collections or **server-only** reads/writes (already direction for workflow entities in the unified access plan).
 
