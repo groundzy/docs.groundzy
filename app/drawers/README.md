@@ -41,6 +41,7 @@ Drawer screen components in `app/drawers/`. Each drawer is registered in `lib/dr
 | view-invoice | view-invoice.tsx | [features/crm.md](../../features/crm.md) |
 | add-invoice | invoice-form.tsx | [features/crm.md](../../features/crm.md) |
 | profile | profile.tsx | [features/profile-and-settings.md](../../features/profile-and-settings.md) |
+| settings | settings.tsx | [settings-organization-tab.md](settings-organization-tab.md) (includes Organization tab / `tab=organization`) |
 | my-photos | my-photos.tsx | [features/profile-and-settings.md](../../features/profile-and-settings.md) |
 | hire-groundzy-pro | hire-groundzy-pro.tsx | [features/hire-pro.md](../../features/hire-pro.md) |
 | ai-identifying-wand | ai-identifying-wand.tsx | [features/ai.md](../../features/ai.md) |
