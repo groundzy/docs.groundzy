@@ -149,7 +149,68 @@ function orgRoleAllows(role: TeamRole, action: OrgAction): boolean
 
 as a **pure** function matching the table above **exactly**.
 
-**Implementation (Groundzy app):** [`lib/groundzy/policy/org-action.ts`](../../../app/lib/groundzy/policy/org-action.ts) (`ORG_ACTIONS`, `orgRoleAllows`, `workflowEntityToOrgReadAction`, `workflowEntityToOrgUpdateAction`, `teamOrgWorkflowReadDenied`, `isOrgAction`). UI shim: [`lib/permissions-utils.ts`](../../../app/lib/permissions-utils.ts).
+**Implementation (Groundzy app):** [`lib/groundzy/policy/org-action.ts`](../../../app/lib/groundzy/policy/org-action.ts) (`ORG_ACTIONS`, `orgRoleAllows`, `workflowEntityToOrgReadAction`, `workflowEntityToOrgUpdateAction`, `teamOrgWorkflowReadDenied`, `isOrgAction`). **v4 presets:** [`lib/groundzy/policy/preset-org-action.ts`](../../../app/lib/groundzy/policy/preset-org-action.ts) (`presetOrgAllows`, `effectiveOrgActionAllow`, `teamOrgWorkflowReadDeniedForMembership`, `orgPolicyDocForMember`). UI shim: [`lib/permissions-utils.ts`](../../../app/lib/permissions-utils.ts).
+
+### 2.5 Team role presets (v4) — `OrgPresetId` × `OrgAction`
+
+**Status:** Normative (v4 extension of §2).  
+**Purpose:** **Presets** are named default capability rows (`OrgPresetId`). **`OrgAction`** remains the atomic vocabulary. **Owner** may attach **per-member overrides** (sparse allow/deny) merged per §2.5.4. **Legacy `TeamRole`** remains stored for backward compatibility; optional **`teams.memberPresetIds[uid]`** selects a preset row when present.
+
+#### 2.5.1 `OrgPresetId` enum (product + legacy bridge)
+
+| `OrgPresetId` | Meaning |
+|---------------|---------|
+| `owner` | Same as §2 **owner** column. |
+| `admin_office` | Same as §2 **admin** column. |
+| `manager` | Same as §2 **manager** column (CRM delete + full workflow + no team admin). |
+| `member` | Same as §2 **member** column (default when no preset override). |
+| `sales` | **member** minus all `org.workflow.job.*` and `org.workflow.invoice.*` (eight denies). |
+| `fieldworker` | Same as §2 **viewer** column (CRM read-only; no org workflow `OrgAction`; self-leave only among team actions). |
+
+#### 2.5.2 Preset × `OrgAction` matrix
+
+For each `OrgPresetId`, the allow bit equals the §2 column named in §2.5.1, **except** **`sales`**: use **member** column for every action **except** set these to **✗**: `org.workflow.job.{create,read,update,delete}`, `org.workflow.invoice.{create,read,update,delete}`.
+
+**Implementation:** [`lib/groundzy/policy/preset-org-action.ts`](../../../app/lib/groundzy/policy/preset-org-action.ts) — `presetOrgAllows(presetId, action)`, `resolveOrgPresetIdForMember`, `effectiveOrgActionAllow`, `orgMemberAllowsOrgAction`.
+
+#### 2.5.3 Scope hints (membership metadata)
+
+| Field | Values | Use |
+|-------|--------|-----|
+| `workflowOrgAccess` | `full` \| `quotes_requests_only` \| `relationship_only` | Product shorthand; **must** remain consistent with the preset’s `OrgAction` booleans (no independent magic). |
+| `crmOrgAccess` | `read` \| `read_write` \| `read_write_delete` | Same — derived documentation for UX. |
+
+Default mapping: **owner / admin_office / manager / member** → `workflowOrgAccess: full` (with **sales** → `quotes_requests_only`). **fieldworker** → `relationship_only` for workflow (viewer column).
+
+#### 2.5.4 Merge precedence (preset + Owner overrides)
+
+Canonical merge for effective org-insider allow:
+
+1. **`base = presetOrgAllows(presetId, action)`** (or, when no preset id stored, derive `presetId` from `TeamRole` per [`resolveOrgPresetIdForMember`](../../../app/lib/groundzy/policy/preset-org-action.ts) and then `presetOrgAllows`).
+2. If **`overrides.deny[action]`** is set → **false** (Owner revoke wins).
+3. Else if **`overrides.allow[action]`** is set → **true** (Owner grant wins over base **false**).
+4. Else **`base`**.
+
+**Composition** with relationship-based access unchanged — see §3–4 and §4.2.
+
+#### 2.5.5 Denormalized `users.orgPolicy` (Firestore rules)
+
+Rules cannot evaluate TypeScript. **`users/{uid}.orgPolicy`** carries a small **denormalized** projection updated in the **same transaction** as `teams.memberPresetIds` / `teams.memberRoles` / overrides:
+
+- **`blockOrgWorkflowReadEntities`** (optional `list` of `request` \| `quote` \| `job` \| `invoice`): when present, **org-wide list/read** on those workflow entities is blocked for **member-tier** insiders even if `users.role` is still `member` (e.g. **sales** preset). Absent list → **no** extra block (legacy behavior).
+- Other caps may be added later; see app `OrgPolicyDoc` type.
+
+**Rules:** `workflowTeamOrgWorkflowRead(orgId, entity)` consults this list so client queries align with server `teamOrgWorkflowReadDenied` when presets are active.
+
+#### 2.5.6 Legacy `TeamRole` → default preset (when `memberPresetIds[uid]` absent)
+
+| `TeamRole` | Default `OrgPresetId` |
+|------------|------------------------|
+| `owner` | `owner` |
+| `admin` | `admin_office` |
+| `manager` | `manager` |
+| `member` | `member` |
+| `viewer` | `fieldworker` |
 
 ---
 

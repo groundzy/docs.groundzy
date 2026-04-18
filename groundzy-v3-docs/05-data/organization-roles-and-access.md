@@ -47,6 +47,13 @@ In v3, an **organization role** (`TeamRole`) is:
 - **MUST** be updated in the **same transactional write** as `teams.memberRoles` for that user (same pattern as membership mutations today).
 - **Purpose of the cache:** Efficient Firestore rules (`hasRole`, `isOwnerOrAdmin`) and client display without loading the full team document on every read. It is **not** a second independent opinion.
 
+### Optional v4 fields: `teams.memberPresetIds`, `users.orgPolicy`
+
+| Field | Canonical storage | Semantics |
+|--------|-------------------|-----------|
+| **Job-function preset** | **`teams/{teamId}.memberPresetIds[uid]`** (optional) | Selects an **`OrgPresetId`** row (see [`org-action-policy-matrix.md`](./org-action-policy-matrix.md) §2.5). When **absent**, the effective preset defaults from **`TeamRole`** (same doc §2.5.6). |
+| **Denormalized rules projection** | **`users/{uid}.orgPolicy`** | Small struct (`presetId`, `blockOrgWorkflowReadEntities`, …) updated in the **same transaction** as `teams.memberPresetIds` / `teams.memberRoles` so **Firestore rules** can narrow org-wide workflow reads without evaluating TypeScript. |
+
 ### Invariant (engineering contract)
 
 ```
