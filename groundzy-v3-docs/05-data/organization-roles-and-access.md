@@ -4,7 +4,7 @@
 **Purpose:** Define how **organization (team) roles** integrate into the Groundzy v3 **access model**—policy-first, server-authoritative, event-oriented—so engineering can implement **without** inferring semantics from legacy UI helpers or duplicated Firestore fields.  
 **Audience:** Backend, client, rules, and security reviewers.
 
-**Related:** **[Unified permission model (v3) — locked decisions](./unified-permission-model-v3.md)** (reads vs writes, canonical role, mental model, examples). Audited codebase summary: [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md). **Concrete policy:** [`org-action-policy-matrix.md`](./org-action-policy-matrix.md). Also: [`permissions.md`](./permissions.md), [`relationships.md`](./relationships.md), [`../../architecture/Groundzy v3 — Access & Permission System.md`](../../architecture/Groundzy%20v3%20—%20Access%20%26%20Permission%20System.md).
+**Related:** **[Unified permission model (v3) — locked decisions](./unified-permission-model-v3.md)** (reads vs writes, canonical role, mental model, examples). Audited codebase summary: [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md). **Concrete policy:** [`org-action-policy-matrix.md`](./org-action-policy-matrix.md). **Product-facing summary (roles, CRUD, nav, assignment):** [`roles-permissions-product-spec.md`](./roles-permissions-product-spec.md). Also: [`permissions.md`](./permissions.md), [`relationships.md`](./relationships.md), [`../../architecture/Groundzy v3 — Access & Permission System.md`](../../architecture/Groundzy%20v3%20—%20Access%20%26%20Permission%20System.md).
 
 ---
 

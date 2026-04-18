@@ -259,6 +259,7 @@ Let **`O = orgRoleAllows(actor.teamRole, action)`** for an **`OrgAction`** when 
 
 ## Related
 
+- [`roles-permissions-product-spec.md`](./roles-permissions-product-spec.md) — consolidated product spec (roles, CRUD, nav, scoped access, member vs viewer)
 - [`teams-and-roles-overview.md`](../../features/teams-and-roles-overview.md) — audit / current implementation
 - [`organization-roles-and-access.md`](./organization-roles-and-access.md)
 - [`permissions.md`](./permissions.md)
