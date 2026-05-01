@@ -21,15 +21,20 @@ Zones get a **placeholder polygon** around the row’s lat/lon and **`needsBound
 
 Each run computes **`importSource.fileId`** from the file name and content hash. Together with **`importSource.sourceRowId`** (inventory `ID`), duplicate detection skips rows that already exist when **Skip duplicates** is enabled.
 
-The CSV **`ID`** is always preserved as `importSource.sourceRowId`. The admin importer also offers **Use CSV ID as treeNumber** for tree rows. When enabled, tree rows must have a positive whole-number `ID`; that value is written to `trees/{treeId}.treeNumber`. Zone rows (`Qty > 1`) keep using `ID` only for source traceability.
+The CSV **`ID`** is always preserved as `importSource.sourceRowId`. The admin importer also offers **Use CSV ID as treeNumber** for tree rows. When enabled, tree rows must have a positive whole-number `ID`; that value is written to `trees/{treeId}.treeNumber`. Zone rows (`Qty > 1`) keep using `ID` as their imported source/inventory ID, not as a tree number.
 
 When CSV IDs are used as tree numbers, the importer performs a second collision check against existing non-deleted trees in the same `organizationId` + `databaseCode` scope. With **Skip duplicates** enabled, those rows are skipped; with it disabled, a tree-number collision is reported as an error. After successful writes, the importer advances `tree_number_counters/{scopeId}.nextNumber` to at least the highest imported tree number + 1 so future generated tree numbers do not collide with the imported inventory range.
+
+For zone rows, the importer also checks for an existing non-deleted zone in the same `organizationId` + `databaseCode` scope with the same `importSource.sourceRowId`. This prevents duplicate aggregate zones when the same source inventory is re-exported or the CSV filename changes.
+
+In the app map, when Labels are on and the label mode is **# Number**, trees show `treeNumber` and imported zones show `#` + `importSource.sourceRowId`. Manual zones without an imported source ID fall back to the zone name.
 
 Composite indexes on Firestore:
 
 - `trees`: `importSource.fileId`, `importSource.sourceRowId`, `isDeleted`
 - `trees`: `organizationId`, `databaseCode`, `treeNumber`, `isDeleted`
-- `zones`: same fields
+- `zones`: `importSource.fileId`, `importSource.sourceRowId`, `isDeleted`
+- `zones`: `organizationId`, `databaseCode`, `importSource.sourceRowId`, `isDeleted`
 
 Deploy indexes with `firebase deploy --only firestore:indexes` from the **app** repo (canonical Firestore config).
 
