@@ -21,9 +21,14 @@ Zones get a **placeholder polygon** around the row’s lat/lon and **`needsBound
 
 Each run computes **`importSource.fileId`** from the file name and content hash. Together with **`importSource.sourceRowId`** (inventory `ID`), duplicate detection skips rows that already exist when **Skip duplicates** is enabled.
 
+The CSV **`ID`** is always preserved as `importSource.sourceRowId`. The admin importer also offers **Use CSV ID as treeNumber** for tree rows. When enabled, tree rows must have a positive whole-number `ID`; that value is written to `trees/{treeId}.treeNumber`. Zone rows (`Qty > 1`) keep using `ID` only for source traceability.
+
+When CSV IDs are used as tree numbers, the importer performs a second collision check against existing non-deleted trees in the same `organizationId` + `databaseCode` scope. With **Skip duplicates** enabled, those rows are skipped; with it disabled, a tree-number collision is reported as an error. After successful writes, the importer advances `tree_number_counters/{scopeId}.nextNumber` to at least the highest imported tree number + 1 so future generated tree numbers do not collide with the imported inventory range.
+
 Composite indexes on Firestore:
 
 - `trees`: `importSource.fileId`, `importSource.sourceRowId`, `isDeleted`
+- `trees`: `organizationId`, `databaseCode`, `treeNumber`, `isDeleted`
 - `zones`: same fields
 
 Deploy indexes with `firebase deploy --only firestore:indexes` from the **app** repo (canonical Firestore config).
