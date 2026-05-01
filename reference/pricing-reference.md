@@ -19,7 +19,7 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 | **GZ-TIN access** | Limited | Limited | Unlimited | Unlimited | Unlimited | Unlimited | Unlimited |
 | **Properties** | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | **Clients** | ✗ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| **Workflow** (requests/quotes/jobs/invoices) | ✗ | ✗ | Pro-scoped | Full | Full | Full | Full |
+| **Workflow** (requests/quotes/jobs/invoices) | ✗ | ✗ | ✗ | Full | Full | Full | Full |
 | **Team features** | ✗ | ✗ | ✗ | ✓ | ✓ | ✓ | ✓ |
 | **Widgets** | ✗ | ✗ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | **Support** | Basic | Basic | Priority | Priority | Priority | Priority | Dedicated CS (Enterprise by quote) |
@@ -83,7 +83,7 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 
 | | |
 |---|---|
-| **Badge** | Unlimited access |
+| **Badge** | 14-day free trial |
 | **Subtext** | Only |
 | **Monthly** | $19/month |
 | **Yearly** | $190/year |
@@ -99,7 +99,6 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 - Unlimited data/map export
 - **Clients** management (`crm.clients` capability)
 - **Properties** management (`crm.properties` capability)
-- **Workflow**: requests, quotes, jobs, and invoices for your own practice (Pro-scoped; not a shared team queue)
 - Widgets
 - Priority support
 
@@ -109,7 +108,7 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 - No admin controls / user management
 - No dedicated account management
 - No seasonal seats
-- On Pro, workflow is scoped to the individual practice (no shared team queue); Teams add shared org workflow
+- Workflow pipeline (requests, quotes, jobs, invoices) is Teams-only
 
 ---
 
@@ -117,7 +116,7 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 
 | | |
 |---|---|
-| **Badge** | For growing businesses |
+| **Badge** | 14-day free trial |
 | **Subtext** | Starting at |
 | **Seats** | 1–5 users |
 | **Monthly** | $89/month |
@@ -182,6 +181,16 @@ Consolidated reference across all three repos: **auth.groundzy** (onboarding), *
 - **Usage resets**: monthly, on signup-day anniversary (or calendar month if signup date unknown)
 - **Active subscription statuses**: `active` and `trialing` grant paid-tier access; all others fall back to Home
 
+### Free trial policy
+
+- **Pro and Teams** start with a 14-day free trial when purchased through Stripe Checkout.
+- A valid payment method is required to start a Pro or Teams trial.
+- Home remains free with no card required.
+- Plus does not receive a free trial.
+- Trial behavior is applied in code at subscription creation using the existing Price IDs; no separate trial Prices are required.
+- During the trial, `subscription.status = "trialing"` grants paid-tier access.
+- Unless canceled before trial end, Stripe converts the subscription to the selected monthly or yearly paid plan.
+
 ---
 
 ## Runtime Tier Names (Firestore)
@@ -214,7 +223,7 @@ Defined in `app.groundzy/lib/capabilities.ts`. Hook: `useCapabilities()`.
 | `legacy.pro_plus_teams_surfaces` | ✗ | ✓ | ✓ | ✓ |
 | `crm.properties` | ✗ | ✓ | ✓ | ✓ |
 | `crm.clients` | ✗ | ✗ | ✓ | ✓ |
-| `workflow.pipeline` | ✗ | ✗ | ✓ | ✓ |
+| `workflow.pipeline` | ✗ | ✗ | ✗ | ✓ |
 | `workitems.read_org` | ✗ | ✗ | ✗ | ✓ |
 | `map.layers_jobs` | ✗ | ✗ | ✗ | ✓ |
 

@@ -145,6 +145,7 @@ Legend: **SOT** = source of truth for enforcement.
 ### Trials
 
 - No dedicated “trial tier” in code; **`trialing`** Stripe status counts as active (**Confirmed**).
+- Pro and Teams use a 14-day card-required trial applied at subscription creation. Home remains no-card free, and Plus remains paid checkout without a trial.
 
 ### Enterprise
 

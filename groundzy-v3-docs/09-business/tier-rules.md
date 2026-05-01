@@ -26,6 +26,8 @@ From **`lib/utils/tier-utils.ts`:**
 
 **Helpers:** `hasActivePaidSubscription`, `hasPaidTierIncomplete` — redirect / upsell flows.
 
+**Trial policy:** Pro and Teams start with a 14-day card-required Stripe trial. During the trial, `subscription.status: "trialing"` grants the selected paid tier. Plus does not have a trial, and Home remains free with no card required.
+
 ---
 
 ## 3. Drawer and feature gates (client)

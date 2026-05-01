@@ -24,6 +24,12 @@ Stripe payment integration.
 | POST /api/stripe/retry-payment | Retry payment |
 | POST /api/stripe/webhook | Webhook handler |
 
+## Trials
+
+Pro and Teams checkout sessions use the existing Stripe Price IDs and add a 14-day trial at subscription creation. Checkout must collect a payment method up front; do not set `payment_method_collection=if_required` for these paid trials. Plus checkout remains non-trial, and Home does not use Stripe checkout.
+
+Stripe webhooks are processed by auth in production. During a trial, `subscription.status = trialing` should be mirrored to Firestore with `trialStart` / `trialEnd`, and app entitlement logic treats `trialing` as paid access.
+
 ## Environment Variables
 
 - STRIPE_SECRET_KEY
