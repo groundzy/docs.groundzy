@@ -2,41 +2,51 @@
 
 ## What it does
 
-**Transactional email** via **Resend** — currently used for **welcome** emails after signup (tier-specific templates), with **fire-and-forget** behavior so signup is not blocked on send failure (`lib/email.ts`).
+**Transactional email** via **Resend** in the **main app** codebase: tier **welcome** mail, **workflow document** delivery (quotes, invoices, jobs, requests), and **intelligence alert** mail (storm × elevated-risk trees). Shared HTML primitives live under **`lib/email/layout.ts`** (`wrapGroundzyTransactionalEmail`, `buildTeamDocumentEmail`, escaping helpers).
 
-## How it’s used
+The **auth** signup app sends **welcome** email only, using the same Groundzy shell (`auth/lib/email/layout.ts`). When changing welcome visuals or legal/footer links, reconcile **both** repositories in one change set.
 
-| Piece | Detail |
-|-------|--------|
-| **SDK** | `resend` package (`package.json`) |
-| **Module** | `lib/email.ts` — `Resend(process.env.RESEND_API_KEY)`, `resend.emails.send` |
-| **From address** | `RESEND_FROM_EMAIL` or default `Groundzy <noreply@app.groundzy.com>` |
-| **Links** | Uses `NEXT_PUBLIC_APP_URL`, terms/privacy URLs in templates |
+## Modules (paths relative to app repo unless noted)
 
-**Callers:** Signup / onboarding flows that invoke welcome send (search for `sendWelcomeEmail` or imports of `@/lib/email`).
+| Flow | Location | Notes |
+|------|-----------|--------|
+| Welcome | `lib/email.ts` | Fire-and-forget after profile creation; tiers include **Enterprise**. Uses layout wrapper + preheader. |
+| Documents + PDF | `lib/email.ts` (`sendDocumentEmail`), `app/api/documents/email/route.ts` | Team-branded shell (“Powered by Groundzy”). Primary CTA opens the **public document portal** at `/documents/{token}` (minted on send in `document_portal_tokens`, same idea as SMS / `portal-issue`). PDF is attached; the portal supports online PDF, quote approval when scoped, and Client Hub. **Reply-To:** verified Firebase **sender email** when present, else team **`businessEmail`**, else workflow **`documentsEmail.senderEmail`**. |
+| Intelligence | `lib/notifications/intelligence-email-resend.ts`, `lib/notifications/intelligence-copy.ts` | Specific subjects/lines + branded HTML + “View tree” CTA. |
 
-## Risks & constraints
+**Auth repo:** `auth/lib/email.ts` + `auth/lib/email/layout.ts` — welcome only (trimmed layout without document helpers).
 
-| Risk | Note |
-|------|------|
-| **Domain verification** | Comment in code: from address must use **verified domain** in Resend (e.g. `app.groundzy.com`) |
-| **Missing API key** | Sends may no-op or error; errors logged, not thrown (signup path) |
-| **Deliverability** | Depends on Resend reputation, SPF/DKIM as configured in Resend dashboard |
-| **Scope** | Not a full marketing automation suite — transactional only in surveyed module |
+## Environment
 
-## Intelligence / digest (planned)
+| Variable | Role |
+|----------|------|
+| `RESEND_API_KEY` | Required for sends (welcome skips silently if missing; document API errors if missing). |
+| `RESEND_FROM_EMAIL` | Verified sender domain (e.g. `Groundzy <noreply@app.groundzy.com>`). |
+| `NEXT_PUBLIC_APP_URL` | App base URL for welcome CTAs and **portal links** minted on document email/SMS (`https://…/documents/{token}`). |
 
-When **email** is used for **non-transactional** intelligence (daily/weekly digests, storm summaries):
+See [`reference/environment-variables.md`](../../reference/environment-variables.md) § Email.
 
-- Route through the same **routing** and **preferences** layer as in-app alerts — see [`../07-systems/delivery-preferences-and-routing.md`](../07-systems/delivery-preferences-and-routing.md).
-- Respect **tier** — see [`../09-business/intelligence-tier-matrix.md`](../09-business/intelligence-tier-matrix.md).
-- Use **unsubscribe** links and store consent consistent with Resend and product policy.
+## Document delivery CTAs
 
-Implementation may extend `lib/email.ts` or add a dedicated digest module; document new env vars in [`../../reference/environment-variables.md`](../../reference/environment-variables.md) when added.
+Workflow document emails (quote, invoice, work order, service request) use a **fresh portal token per send**. The HTML button points at `{NEXT_PUBLIC_APP_URL}/documents/{token}` so recipients without a Groundzy account can open the PDF flow and (for quotes) approve when the token includes `approve_quote`. Observability: server logs `[document-portal]` with event **`portal_issue_email`** when minting from email.
 
----
+## Document email merge tokens
+
+Subjects and body templates (team workflow **`documentsEmail`**) support:
+
+`{{companyName}}`, `{{clientName}}`, `{{documentType}}`, `{{documentTitle}}`, `{{documentNumber}}`, `{{totalAmount}}`, `{{currency}}`, `{{dueDate}}`, `{{validUntil}}`, `{{propertyAddress}}`
+
+**Client name** comes from document **`recipient.name`** (CRM snapshot), not the recipient email local-part.
+
+Team Settings exposes quote, invoice, **work order**, and **service request** subject templates.
+
+## Risks and follow-ups
+
+- **Deliverability:** SPF/DKIM in Resend; domain alignment with links in body.
+- **Intelligence:** Prefer actionable copy (storm titles reference tree label + wind/alerts). Future: unsubscribe / prefs deep link when product exposes a stable URL.
+- **Firebase Auth templates** (password reset, verification): edited in **Firebase Console**, not Resend — see [`deployment/firebase-auth-email-templates.md`](../../deployment/firebase-auth-email-templates.md).
 
 ## Related
 
-- `pro_contact_requests` / Cloud Functions may send **other** emails — verify `firebase/functions` or server code if present outside `lib/email.ts`
-- `docs/reference/environment-variables.md` § Email
+- [`deployment/pdf-generation-app-hosting-retrospective.md`](../../deployment/pdf-generation-app-hosting-retrospective.md)
+- [`07-systems/delivery-preferences-and-routing.md`](../07-systems/delivery-preferences-and-routing.md)

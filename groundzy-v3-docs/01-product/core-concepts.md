@@ -18,9 +18,11 @@ A **Tree** is a first-class record for an individual tree (or mapped tree entity
 
 ## Zone
 
-A **Zone** is a mapped area (polygon) used to group or describe land at a level above a single tree—often for planning, bulk operations, or spatial context.
+A **Zone** is a mapped area (polygon) used to group or describe land at a level above a single tree—often for planning, bulk operations, grouped-tree care, or spatial context.
 
 - Zones relate to **Trees** and may anchor **work** scoped to an area.
+- A zone can represent a **grouped-tree care record**: aggregate inventory counts (`speciesCounts`), individually assigned trees (`tree.zoneId`), or both.
+- Trees physically inside a polygon are spatial candidates; they are not considered intentionally managed by the zone until assigned or represented in aggregate inventory.
 - Product docs treat “zone” consistently as spatial grouping, not as a substitute for **Property** or **Client**.
 
 ---

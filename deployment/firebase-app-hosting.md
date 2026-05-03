@@ -6,7 +6,11 @@ Firebase App Hosting configuration in `apphosting.yaml`.
 
 - **Region**: us-central1
 - **Instances**: min 0, max 10, concurrency 80
-- **Resources**: 1 CPU, 512 MiB memory
+- **Resources**: 1 CPU, **1024 MiB memory** (`runConfig.memoryMiB` — raised during Chromium/PDF experimentation; tune if workloads change.)
+
+## Related
+
+- **[PDF generation on App Hosting retrospective](./pdf-generation-app-hosting-retrospective.md)** — Quote/invoice PDF + email incidents (Puppeteer, Sparticuz, PDFKit, standalone tracing, git 408).
 
 ## Environment Variables
 

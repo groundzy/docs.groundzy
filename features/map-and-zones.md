@@ -92,16 +92,22 @@ Marker size scales between the tier’s minimum zoom and zoom 18. Map PNG export
 ## Zones
 
 - **Collection**: Firestore `zones`
-- **Fields**: `organizationId`, `geometry` (GeoJSON), `name`, `description`, `propertyId`, `color`, `isDeleted`, `createdAt`
+- **Fields**: `organizationId`, `coordinates` (polygon points), `name`, `description`, `propertyId`, `clientId`, `color`, `speciesCounts`, `media`, `condition`, `measurements`, `workObjectives`, `importSource`, `needsBoundaryReview`, `isDeleted`, `createdAt`
 - **Subcollection**: `zones/{zoneId}/zone_services` – bulk zone services
 - **Hooks**: `useZones`, `useZone`, `useCreateZone`
 - **Map**: `zone-layer.tsx` renders zones; click opens `view-zone` drawer
+- **Grouped-tree model**:
+  - `speciesCounts` are aggregate trees in the zone without individual `Tree` documents.
+  - `tree.zoneId === zone.id` means an individual tree is intentionally assigned to the zone.
+  - Trees inside the polygon but without `zoneId` are boundary candidates that can be assigned.
 
 ## View Zone (`view-zone` drawer)
 
 - **Params**: `zoneId`
 - **Location**: `app/drawers/view-zone.tsx`
-- Shows zone details, linked property, zone services
+- Shows a zone passport plus tabs for overview, inventory, activity, operations, media, and system metadata.
+- **Inventory** separates aggregate counts, assigned individual trees, and inside-boundary candidates.
+- **Activity/Ops** include zone services, workflow work items, recommended work, and grouped service scheduling.
 
 ## Map Store (`map-store`)
 

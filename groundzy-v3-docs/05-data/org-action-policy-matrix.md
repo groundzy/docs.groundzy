@@ -74,8 +74,11 @@ Same CRUD vocabulary for each entity:
 | `org.team.membership.self_leave` |
 | `org.team.ownership.transfer` |
 | `org.billing.manage` |
+| `org.payments.connect_onboard` |
+| `org.payments.charge_card` |
+| `org.payments.refund` |
 
-**Count:** 39 `OrgAction` values (12 CRM + 16 workflow + 11 team/billing).
+**Count:** 42 `OrgAction` values (12 CRM + 16 workflow + 14 team/billing/payments).
 
 ### 1.3 Out of scope for `OrgAction`
 
@@ -131,6 +134,9 @@ The following are **not** `OrgAction` strings — they belong to **WorkflowActio
 | `org.team.membership.self_leave` | ✓ | ✓ | ✓ | ✓ | ✗ |
 | `org.team.ownership.transfer` | ✗ | ✗ | ✗ | ✗ | ✓ |
 | `org.billing.manage` | ✗ | ✗ | ✗ | ✗ | ✓ |
+| `org.payments.connect_onboard` | ✗ | ✗ | ✗ | ✓ | ✓ |
+| `org.payments.charge_card` | ✗ | ✓ | ✓ | ✓ | ✓ |
+| `org.payments.refund` | ✗ | ✗ | ✓ | ✓ | ✓ |
 
 **Notes (normative):**
 
@@ -169,7 +175,7 @@ as a **pure** function matching the table above **exactly**.
 
 #### 2.5.2 Preset × `OrgAction` matrix
 
-For each `OrgPresetId`, the allow bit equals the §2 column named in §2.5.1, **except** **`sales`**: use **member** column for every action **except** set these to **✗**: `org.workflow.job.{create,read,update,delete}`, `org.workflow.invoice.{create,read,update,delete}`.
+For each `OrgPresetId`, the allow bit equals the §2 column named in §2.5.1, **except** **`sales`**: use **member** column for every action **except** set these to **✗**: `org.workflow.job.{create,read,update,delete}`, `org.workflow.invoice.{create,read,update,delete}`, **`org.payments.charge_card`**, **`org.payments.refund`**.
 
 **Implementation:** [`lib/groundzy/policy/preset-org-action.ts`](../../../app/lib/groundzy/policy/preset-org-action.ts) — `presetOrgAllows(presetId, action)`, `resolveOrgPresetIdForMember`, `effectiveOrgActionAllow`, `orgMemberAllowsOrgAction`.
 

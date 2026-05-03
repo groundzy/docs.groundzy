@@ -12,7 +12,9 @@ docs/
 │
 ├── deployment/
 │   ├── DEPLOY.md
-│   └── firebase-app-hosting.md
+│   ├── firebase-app-hosting.md
+│   ├── firebase-auth-email-templates.md
+│   └── pdf-generation-app-hosting-retrospective.md
 │
 ├── audits/                    # Audits, inventories, drawer PR checklist — see audits/README.md
 ├── handoffs/                  # Initiative handoffs — see handoffs/README.md
@@ -25,6 +27,7 @@ docs/
 │   │   └── FILE-STRUCTURE.md   # Full md manifest (existing v3 docs + gaps)
 │   ├── project-structure-current.md
 │   ├── complete-architecture-documentation.md
+│   ├── client-invoice-payments.md      # Stripe Connect: client invoice pay, webhooks, tiers
 │   └── visibility-permission-model-v2.md
 │
 ├── app/
@@ -112,7 +115,7 @@ docs/
 | `package.json` | [reference/dependencies.md](./reference/dependencies.md) |
 | `next.config.ts` | [config/nextjs.md](./config/nextjs.md) |
 | `tailwind.config.ts` | [config/tailwind.md](./config/tailwind.md) |
-| `apphosting.yaml` | [deployment/firebase-app-hosting.md](./deployment/firebase-app-hosting.md) |
+| `apphosting.yaml` | [deployment/firebase-app-hosting.md](./deployment/firebase-app-hosting.md); PDF/email production issues: [deployment/pdf-generation-app-hosting-retrospective.md](./deployment/pdf-generation-app-hosting-retrospective.md) |
 | `firebase.json` | [firebase/README.md](./firebase/README.md) |
 
 ---

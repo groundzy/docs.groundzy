@@ -21,6 +21,8 @@ Environment overrides (optional):
 | `PORTAL_RL_SMS_MAX` | 20 | SMS-link per uid per **3h window** (see `PORTAL_RL_SMS_WINDOW_MS`, default 3_600_000) |
 | `PORTAL_RL_HUB_MINT_MAX` | 15 | Client-hub mint-portal per session key per hour |
 | `PORTAL_RL_HUB_SESSION_MAX` | 20 | Client-hub session-from-token per IP per minute |
+| `PORTAL_RL_HUB_READ_MAX` | 120 | Client-hub trees + workflow-detail per org+client+IP per window |
+| `PORTAL_RL_HUB_READ_WINDOW_MS` | 60000 | Window for hub read |
 
 Stable **429** JSON: `{ "error": "Too many requests", "code": "rate_limited" }`.
 

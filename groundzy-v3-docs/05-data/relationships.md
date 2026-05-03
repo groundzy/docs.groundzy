@@ -26,9 +26,10 @@ Client ←──┬── Property ←── Tree (optional many trees per prope
 |------|-----|----------|--------|
 | **Tree** | Property | `propertyId?` | Optional |
 | Tree | Client | `clientId?` | Optional |
-| Tree | Zone | `zoneId?`, `brokenOutFromZoneId?` | Lineage from aggregate |
+| Tree | Zone | `zoneId?`, `brokenOutFromZoneId?` | Assigned zone membership and lineage from aggregate |
 | **Property** | Client | `clientId?` | Optional (Plus comment in `types/property.ts`) |
 | **Zone** | Property / Client | `propertyId?`, `clientId?` | Optional |
+| **Zone** | Aggregate trees | `speciesCounts[]` | Grouped-tree inventory without individual Tree docs |
 | **Request** | Client, Property | `clientId`, `propertyId?` | Required client |
 | **Quote** | Client, Property, Request | `clientId`, `propertyId`, `requestId?` | |
 | **Job** | Client, Property, Request, Quote | `clientId`, `propertyId`, `requestId?`, `quoteId?` | |
@@ -77,6 +78,14 @@ Client ←──┬── Property ←── Tree (optional many trees per prope
 | **No DB-level FK enforcement** | Deletes may orphan references; soft-delete snapshots (`clientDisplayNameSnapshot`) compensate for CRM. |
 | **Job ↔ Tree** | Primarily `treeIds` on Job + line items; deprecated `tree.business.activeJobIds` on Tree (`types/tree.ts`). |
 | **Invoice ↔ Tree** | Via line item `treeIds`, not a single tree id on invoice header. |
+
+---
+
+## 7. Tree species and species catalog
+
+| From | To | Field | Notes |
+|------|-----|-------|-------|
+| **Tree** | **species_catalog** | `species.catalogItemId?` | Optional link to curated catalog docs. Nested `species.*` blocks may be omitted when the catalog is authoritative and unchanged in the UI; clients merge catalog rows at read time for display (see `mergeTreeSpeciesWithCatalogItem` / `buildSpeciesPayloadForSave` under `Groundzy/app/lib/trees/`). |
 
 ---
 

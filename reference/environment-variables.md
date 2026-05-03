@@ -27,7 +27,10 @@ Create `.env.local` in the project root for local development. For production (F
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `STRIPE_SECRET_KEY` | Yes* | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Yes* | Webhook signing secret |
+| `STRIPE_WEBHOOK_SECRET` | Yes* | Webhook signing secret **on auth.groundzy** for **subscription** events only |
+| `STRIPE_CONNECT_WEBHOOK_SECRET` | Yes* | On **app.groundzy**, signing secret for `POST /api/stripe/connect-webhook` (Connect charges, `account.updated`, refunds) |
+| `GROUNDZY_CONNECT_PLATFORM_FEE_BPS` | No | Platform application fee on Connect charges (0–10000 bps). Default 0. |
+| `GROUNDZY_CONNECT_STRIPE_PASSTHROUGH_BPS` | No | When team sets fee payer to client, approximate card-fee uplift on charged amount (default 350). |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Yes* | Publishable key (client) |
 | `STRIPE_PRICE_PLUS_YEARLY` | No | Price ID for Plus yearly (fallback in stripe-config) |
 
@@ -78,8 +81,9 @@ Create `.env.local` in the project root for local development. For production (F
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `RESEND_API_KEY` | No | Resend API key (transactional emails) |
+| `RESEND_API_KEY` | No | Resend API key (welcome, document delivery, intelligence mail). Document send fails if unset. |
 | `RESEND_FROM_EMAIL` | No | From email (default: Groundzy &lt;noreply@app.groundzy.com&gt;) |
+| `NEXT_PUBLIC_APP_URL` | No | Base URL for dashboard links in emails (default `https://app.groundzy.com`). |
 
 ## Intelligence & internal jobs (server)
 

@@ -40,7 +40,7 @@ These params are passed through `navigate(drawerId, params)`; the URL remains th
 
 ## Workflow dirty navigation
 
-- Drawers listed in `WORKFLOW_DRAWERS` participate in **unsaved changes** flow when `workflowFormDirty` is true (`attemptWorkflowNavigate`, discard dialog).
+- Drawers listed in `WORKFLOW_DRAWERS` participate in **unsaved changes** flow when `workflowFormDirty` is true (`attemptWorkflowNavigate`, discard dialog). The set includes **`draw`** (finish-zone form after drawing a polygon) when `useWorkflowFormDirty("draw", …)` reports dirty.
 - See [navigation-store.ts](../stores/navigation-store.ts) for the canonical list.
 - **Sub-flow bypass:** If navigation params include `returnTo` equal to the **current** `activeDrawer` (e.g. `add-request` → `add-property` with `returnTo=add-request`), `attemptWorkflowNavigate` **allows** the navigation without opening the discard dialog. Call sites that open add-client / add-property from workflow forms already pass this. Close, sidebar, and other leaves either omit `returnTo` or use a different target, so they still trigger the confirm when dirty.
 
