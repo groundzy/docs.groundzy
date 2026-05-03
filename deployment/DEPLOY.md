@@ -76,8 +76,39 @@ App runs at [http://localhost:3000](http://localhost:3000). For network access (
 
 1. Create products and prices in Stripe Dashboard
 2. Set price IDs in `lib/stripe-config.ts` (or env vars where used)
-3. Configure webhook endpoint: `https://<your-domain>/api/stripe/webhook`
+3. Configure webhook endpoint on **auth** (platform subscriptions): `https://<auth-domain>/api/stripe/webhook`
 4. Add `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` to env
+5. **Webhook events to select** (auth platform billing): `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.paid` (used as a redundant sync path for invoice-billed subscriptions).
+
+### Invoice-billed yearly subscriptions (ops)
+
+For customers who pay by **Stripe invoice** (`collection_method: send_invoice`), subscriptions are created server-side—not via Checkout—and still update Firestore through the same webhook handlers.
+
+**Runbook:**
+
+1. Ensure the Firebase user exists in `users/{uid}` with correct email (and Teams: `organizationData` on the user **or** pass `organizationData` in the request).
+2. Set a long random **`GROUNDZY_STRIPE_BILLING_OPS_KEY`** (see [reference/environment-variables.md](../reference/environment-variables.md)); never expose this to browsers.
+3. `POST https://<auth-domain>/api/stripe/ops-create-invoice-subscription` with header `Authorization: Bearer <GROUNDZY_STRIPE_BILLING_OPS_KEY>` and JSON body `{ "uid", "tier", "billingCycle", "teamSize?" , "organizationData?" }` (tier: `plus` \| `pro` \| `teams`, same semantics as Checkout).
+4. Share `hosted_invoice_url` from the response (or Stripe’s emailed invoice).
+5. After the customer pays, confirm `users/{uid}` has `subscription.status` `active` and expected `stripeSubscriptionId` (webhook-driven).
+
+Optional: **`STRIPE_INVOICE_DAYS_UNTIL_DUE`** (default 30; integer 1–90) controls net terms on created invoices.
+
+In production secrets (App Hosting):
+
+```bash
+npx firebase apphosting:secrets:set GROUNDZY_STRIPE_BILLING_OPS_KEY --project <project-id>
+```
+
+### Local webhook testing (Stripe CLI)
+
+Forward events to auth while developing (`STRIPE_WEBHOOK_SECRET` must match the `whsec_` signing secret Stripe CLI prints):
+
+```bash
+stripe listen --forward-to http://localhost:<auth-port>/api/stripe/webhook
+```
+
+Exercise subscription lifecycle with **`stripe trigger customer.subscription.updated`** (and related events), or complete a **test invoice** payment in Stripe test mode while `listen` is running. Confirm Firestore **`users/{uid}.subscription.status`** becomes **`active`** only after Stripe reports the subscription as paid/active.
 
 ## Firebase App Hosting (Production)
 

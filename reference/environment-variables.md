@@ -27,7 +27,9 @@ Create `.env.local` in the project root for local development. For production (F
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `STRIPE_SECRET_KEY` | Yes* | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Yes* | Webhook signing secret **on auth.groundzy** for **subscription** events only |
+| `STRIPE_WEBHOOK_SECRET` | Yes* | Webhook signing secret **on auth.groundzy**. Subscribe at least to: `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, **`invoice.paid`** (recommended for invoice-billed subscriptions). |
+| `GROUNDZY_STRIPE_BILLING_OPS_KEY` | No | Long random secret. Required on **auth** to call **`POST /api/stripe/ops-create-invoice-subscription`** (`Authorization: Bearer …`). **Also** configure the **same secret** on **admin Firebase Functions** (see Admin Cloud Functions below) so the **`adminCreateInvoiceSubscription`** proxy can reach auth—the browser never sees this key. Alternate env name: **`STRIPE_BILLING_OPS_KEY`**. |
+| `STRIPE_INVOICE_DAYS_UNTIL_DUE` | No | **`1`–`90`**. Stripe `days_until_due` for ops-created **`send_invoice`** subscriptions (default **30**). |
 | `STRIPE_CONNECT_WEBHOOK_SECRET` | Yes* | On **app.groundzy**, signing secret for `POST /api/stripe/connect-webhook` (Connect charges, `account.updated`, refunds) |
 | `GROUNDZY_CONNECT_PLATFORM_FEE_BPS` | No | Platform application fee on Connect charges (0–10000 bps). Default 0. |
 | `GROUNDZY_CONNECT_STRIPE_PASSTHROUGH_BPS` | No | When team sets fee payer to client, approximate card-fee uplift on charged amount (default 350). |
@@ -35,6 +37,17 @@ Create `.env.local` in the project root for local development. For production (F
 | `STRIPE_PRICE_PLUS_YEARLY` | No | Price ID for Plus yearly (fallback in stripe-config) |
 
 *Required for payment flows.
+
+## Admin Cloud Functions (`admin/functions`)
+
+Firebase HTTPS functions backing the admin static site (e.g. Pexels proxy, Stripe invoice tooling).
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GROUNDZY_STRIPE_BILLING_OPS_KEY` | Yes* | Same shared secret as configured on **auth** for Stripe ops billing (env or GCP Secret Manager; see `admin/functions/src/secrets.ts`). |
+| `GROUNDZY_AUTH_BASE_URL` | No | Auth app base URL, **no trailing slash** (e.g. `https://auth.groundzy.com`). Default when unset is **`https://auth.groundzy.com`**. Use for staging/non-prod targets. |
+
+*Required for **`adminCreateInvoiceSubscription`** (Admin UI → **Invoice billing**). Deploy: from **`admin/`** run **`npm run deploy:billing`** (or from `admin/functions`, same script; or `firebase deploy --only functions:adminCreateInvoiceSubscription`).
 
 ## Mapbox
 
