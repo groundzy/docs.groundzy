@@ -109,6 +109,16 @@ Exact mapping: [`intelligence-tier-matrix.md`](../09-business/intelligence-tier-
 
 ---
 
+## 5b. Storm intelligence email batching (implemented)
+
+The secured batch route `POST /api/internal/intelligence/evaluate-storm-risk/run-batch` evaluates many trees per HTTP invocation. **Email** uses **one Resend message per recipient user per invocation**, listing all trees that **newly** fired storm intelligence in that run (per-tree event dedupe still prevents duplicate fires). **In-app** rows under `notifications` remain **one document per tree**.
+
+Single-tree evaluation (`POST /api/internal/intelligence/evaluate-storm-risk` with `treeId`) sends email immediately using the **same** digest formatter with a single tree.
+
+**App references:** `lib/intelligence/run-storm-intel-batch.ts`, `lib/notifications/intelligence-email.ts`, `lib/notifications/intelligence-email-resend.ts`, `lib/intelligence/run-storm-weak-tree-evaluation.ts`.
+
+---
+
 ## 6. Workflow-triggered alerts (same engine)
 
 For **non-intelligence** events (e.g. job assigned, quote accepted):
@@ -127,7 +137,7 @@ Keeps **one** inbox and one routing policy.
 | Severity on Firestore `notifications` | **Missing** — add per [`notification-data-model-v3.md`](./notification-data-model-v3.md) |
 | Channel field per row | **Missing** |
 | Central decision function in code | **Missing** — this doc is the spec |
-| Resend | **Present** — [`email.md`](../08-integrations/email.md) |
+| Resend | **Present** — [`email.md`](../08-integrations/email.md); storm intelligence email is **batched per user per batch run** (§5b) |
 | SMS | **Not in app** — routing returns `sms: true` only when integration exists |
 | User preferences doc | **Partial / TBD** — defaults can assume “email on for warning+” until UI ships |
 
