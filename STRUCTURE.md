@@ -28,6 +28,7 @@ docs/
 │   ├── project-structure-current.md
 │   ├── complete-architecture-documentation.md
 │   ├── client-invoice-payments.md      # Stripe Connect: client invoice pay, webhooks, tiers
+│   ├── integrations-hub.md             # Integrations / add-ons drawer, catalog, tier gating
 │   └── visibility-permission-model-v2.md
 │
 ├── app/
@@ -172,6 +173,7 @@ docs/
 | `lib/utils/` | [lib/utils/README.md](./lib/utils/README.md) |
 | `lib/tutorials/` | [features/profile-and-settings.md](./features/profile-and-settings.md) |
 | `lib/services/` | [lib/services/README.md](./lib/services/README.md) |
+| `lib/integrations/` | [architecture/integrations-hub.md](./architecture/integrations-hub.md) |
 | `lib/drawer-*.ts` | [features/drawer-system.md](./features/drawer-system.md) |
 | `lib/stripe-*.ts` | [reference/stripe.md](./reference/stripe.md) |
 | Other lib files | [lib/README.md](./lib/README.md) |

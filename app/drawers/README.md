@@ -58,3 +58,11 @@ Drawer screen components in `app/drawers/`. Each drawer is registered in `lib/dr
 
 - **dashboard/** – Dashboard subcomponents (DashboardUpcomingList, etc.)
 - **view-tree/** – View tree layout, tabs, components
+
+## contact-us drawer (Inbox)
+
+The drawer id remains **`contact-us`** (stable routing and deep links). The nav label is **Inbox** (`lib/drawers.ts` / i18n).
+
+**Unified feed:** The home view merges **unread** Firestore notifications (`AppNotification`; read items no longer appear here), **direct/support conversations**, and (when applicable) a **pending access requests** summary, in one reverse-chronological list (`buildInboxFeedItems` in `app/drawers/contact-us/inbox-feed-items.ts`). Optional **SMS with clients — coming soon** teaser for **Pro and Teams** only (no SMS backend yet; hidden for Home and Plus). **Clear all alerts** marks every notification as read (same data; removed from this list).
+
+**Entry points:** Compose (FAB) starts a new direct message. **Pill actions** in the toolbar open access requests (with pending count), share tree, contact support, and (for global admins) support inbox and orphaned-marker cleanup.

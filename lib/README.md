@@ -13,6 +13,7 @@ Shared utilities, Firebase, i18n, and domain logic in `lib/`.
 | utils/ | Utility functions | [utils/README.md](./utils/README.md) |
 | tutorials/ | Tutorial definitions | [features/profile-and-settings.md](../features/profile-and-settings.md) |
 | services/ | Services (species icon) | [services/README.md](./services/README.md) |
+| integrations/ | Add-ons catalog, tier-gated integration definitions | [architecture/integrations-hub.md](../architecture/integrations-hub.md) |
 
 ## Root Files
 

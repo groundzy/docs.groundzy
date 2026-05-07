@@ -16,10 +16,14 @@ This document describes how Groundzy processes **client-facing** card payments (
 | Team payment prefs (fee payer) | `GET/POST /api/stripe/connect/client-payment-settings` |
 | Guest PaymentIntent | `POST /api/client-hub/invoice-pay` |
 | Guest pay settlement (after Elements confirms) | `POST /api/client-hub/invoice-pay/confirm` — idempotent; use with Connect webhooks |
-| Staff PaymentIntent / saved card | `POST /api/stripe/connect/create-payment-intent`, `POST /api/stripe/connect/charge-saved` |
+| Staff PaymentIntent mint (authenticated; **Record payment** → Card tab, or future callers) | `POST /api/stripe/connect/create-payment-intent` — requires `org.payments.charge_card` + invoice read/update; invoice must be `awaiting_payment` with `amountDue > 0` |
+| Staff-assisted Elements settlement (mirror of guest confirm) | `POST /api/stripe/connect/staff-invoice-payment-confirm` — Firebase-auth; requires same org-actions as mint; validates PI on connected account then `settleInvoiceFromSucceededConnectPaymentIntent` |
+| Staff PaymentIntent / saved card (off-session saved PM) | `POST /api/stripe/connect/charge-saved` |
+| Staff-recorded payment ledger (cash, check, ACH, wire, other — no PAN) | `POST /api/invoices/record-payment` |
 | List saved cards + default PM | `GET /api/stripe/connect/payment-methods` |
 | Add / remove / default card (API) | `POST /api/stripe/connect/setup-payment-method`, `detach-payment-method`, `set-default-payment-method` |
-| CRM UI | `ClientPaymentMethodsSection` in **view-client** drawer (Pro/Teams, `org.client.update` + Stripe Connect ready) |
+| CRM UI — cards on client record | `ClientPaymentMethodsSection` in **view-client** drawer (`org.client.update` + Stripe Connect ready) |
+| Invoice UI — staff card checkout | **`RecordInvoicePaymentDialog`** (**Record payment**) → Card tab (`InvoiceCardPaymentInline`, Stripe Elements; requires `org.payments.charge_card` + invoice read/update and Connect charges enabled when card tab is usable) |
 | Refund | `POST /api/stripe/connect/refund` |
 | Recurring (treatment subscription) | `POST /api/stripe/connect/recurring-subscription` |
 | Recurring (invoicing / schedule, Stripe invoices per cycle) | `POST /api/stripe/connect/recurring-invoice-schedule` |
@@ -70,7 +74,21 @@ Client invoice card charges use **direct charges** on the **connected account** 
 ## Org actions
 
 - `org.payments.connect_onboard` — create Express account and onboarding links (owner/admin).
-- `org.payments.charge_card` — charge saved card / staff flows (matrix + sales preset denies).
+- `org.payments.charge_card` — mint staff invoice PaymentIntent, **staff-invoice-payment-confirm**, saved-card charge (`charge-saved`); denial in sales presets still applies (`preset-org-action.ts`).
 - `org.payments.refund` — refunds API.
 
 See `lib/groundzy/policy/org-action.ts` and `preset-org-action.ts` for the matrix; update `groundzy-v3-docs/05-data/org-action-policy-matrix.md` when changing actions.
+
+## Staff-recorded payments (cash, check, other)
+
+When money is collected **outside** Stripe (cash, check, ACH recorded as received, etc.), staff use **Record payment** on the invoice drawer or list row. This is **not** a card charge: it only appends a row to `invoices.{id}.payments[]` and updates `amountPaid` / `amountDue` / `status` on the server.
+
+For **card** collection via Elements, staff open **Record payment** on the invoice drawer or list, choose **Card**, and complete Stripe on the connected account. **Charge saved card** on the client record or the guest **client pay link** remain separate entry points.
+
+| Concern | Location |
+|---------|----------|
+| Server settlement (transaction + idempotency) | `lib/server/invoice-manual-settlement.ts` — `applyManualPaymentToInvoice` |
+| API | `POST /api/invoices/record-payment` — Firebase ID token (same pattern as Stripe mutation routes); requires `org.workflow.invoice.read` + `org.workflow.invoice.update` |
+| Allowed methods (body `method`) | `cash`, `check`, `ach`, `wire`, `other` only — cards must go through Stripe (`applyStripePaymentToInvoice` sets `paymentMethod: "card"` and `source: "stripe_connect"`) |
+| Job `paidAt` | When the invoice becomes fully paid, the route calls `maybeSetJobPaidTimestamp` (same as Connect settlement). Client `updateInvoice` no longer sets `paidAt` when toggling status; use the ledger APIs. |
+| Types | `types/invoice.ts` — `InvoicePayment`, `InvoicePaymentSource`, `ManualInvoicePaymentMethod` |

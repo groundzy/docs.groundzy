@@ -11,6 +11,12 @@
 | **Cards** | Primary patterns: `DrawerSection`, `contentCardClass` ([`lib/card-styles.ts`](../lib/card-styles.ts)), `listItemCardClass`, `brandedDeepTealCardClass`, bespoke |
 | **Overrides** | e.g. `weather-drawer-gradient`, `bg-transparent` on shell, tier gates |
 
+## Shared workflow view footer (2026-05)
+
+Pipeline entity **view** drawers (`view-request`, `view-quote`, `view-job`, `view-invoice`) use [`WorkflowDrawerActions`](../../app/app/drawers/components/WorkflowDrawerActions.tsx): **Row A** = icon toolbar (edit, optional Mark-as flex slot, **More** `h-12 w-12` icon-only, destructive delete); **Row B** = a single primary CTA from `get*DrawerActions` (`tone: "main"`) or `primarySlot` (e.g. request Convert). Navigational defs live in `secondary` and render under **More → Pipeline**; email/SMS under **More → Communications**. CRM **view-client** / **view-property** use the same two-row rhythm: Row A icon strip (delete, edit, map when Teams), Row B = Create workflow (Teams) or full-width Show on map (solo).
+
+See [`workflow-view-footer-layout-audit-2026-05.md`](./workflow-view-footer-layout-audit-2026-05.md).
+
 ## Registry rows (one line per `registerDrawer` ID)
 
 | ID | Entry / lazy import | Shell | Scroll | Cards | Overrides / notes |
