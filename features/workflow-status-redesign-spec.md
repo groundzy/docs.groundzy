@@ -303,7 +303,7 @@ Same pattern as Request: context-specific menus (send, convert, archive, print, 
 | Status | Meaning (intent) |
 |--------|------------------|
 | **Draft** | Not yet issued to the customer (editable). |
-| **Awaiting Payment** | Sent / issued; full amount still outstanding. |
+| **Awaiting Payment** | **Issued** to the customer (including **Issue without sending** with `issuedAt`) **or** sent via email/SMS (`sentAt`); full amount still outstanding. |
 | **Past Due** | Past payment terms / due date without full payment. |
 | **Paid** | Fully collected; closed for AR. |
 | **Bad Debt** | Uncollectible — written off or abandoned per policy (not “paid”). |
@@ -319,10 +319,14 @@ Same pattern as Request: context-specific menus (send, convert, archive, print, 
 | Action |
 |--------|
 | Preview |
-| Send / Issue *(→ **Awaiting Payment**)* |
+| **Record payment** *(manual methods and staff card via Stripe Connect when enabled — **Send email** is not required)* *(full payment → **Paid**; partial → **Awaiting Payment** with balance due)* |
+| **Issue without sending** *(optional — **Awaiting Payment**; sets `issuedAt`; does **not** set `sentAt` / email delivery)* |
+| Send email *(optional — **Awaiting Payment**; sets delivery timestamps per email flow)* |
 | Print / Download |
 | Delete |
 | Edit |
+
+> **Pay-first:** Clients often pay before any invoice is emailed (cash, off-platform transfer, in-person card). Staff can record payment directly from **Draft** without sending.
 
 ---
 
@@ -336,6 +340,8 @@ Same pattern as Request: context-specific menus (send, convert, archive, print, 
 | Write off to Bad Debt *(policy)* |
 | Print / Download |
 | Edit *(policy: lock after send)* |
+
+> **Future — client reminders:** When automated payment reminders exist, gate them on **`sentAt`** (email/SMS actually sent) **or** **`issuedAt`** (staff used **Issue invoice (no email)**) so clients are not nudged for invoices that were never issued to them in Groundzy.
 
 ---
 
