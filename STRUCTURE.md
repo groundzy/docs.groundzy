@@ -28,6 +28,7 @@ docs/
 │   ├── project-structure-current.md
 │   ├── complete-architecture-documentation.md
 │   ├── client-invoice-payments.md      # Stripe Connect: client invoice pay, webhooks, tiers
+│   ├── auth-groundzy-provisioning-billing.md  # Auth app: provisioning projection, checkout, webhooks
 │   ├── integrations-hub.md             # Integrations / add-ons drawer, catalog, tier gating
 │   └── visibility-permission-model-v2.md
 │

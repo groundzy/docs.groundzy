@@ -523,6 +523,8 @@ Current types use different labels (`types/request.ts`, `types/quote.ts`, `types
 
 Authoritative **as-built** analysis: `docs/features/workflow-request-quote-job-invoice-status-analysis.md`.
 
+**Drawer CTA matrix (status × staff action):** [`workflow-cta-matrix.md`](./workflow-cta-matrix.md) — complements this appendix with product-readable tables; implementation source remains the app registry.
+
 ---
 
 *End of spec.*
