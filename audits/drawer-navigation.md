@@ -8,25 +8,24 @@ This document is the **spec** for how drawer navigation, URL state, and in-app h
 - **No `drawer` query param** means the drawer is **closed** in the UI: `work-area-content` clears `activeDrawer` and work-area chrome to match the URL (except the initial `/` load path that replaces with `dashboard`).
 - [`navigation-store`](../stores/navigation-store.ts) tracks **activeDrawer**, **mobile work area**, **drawer history stack** (`drawerHistory`, `historyIndex`), and **workflow dirty** state.
 
-## History stack (`pushToHistory` / back / forward)
+## History stack (`pushToHistory` / `syncHistoryFromUrl`)
 
-- Opening a drawer via in-app navigation typically **pushes** a new entry (see `pushToHistory`).
-- **`syncHistoryFromUrl`**: when the URL’s drawer + params do not match any in-app history entry, the stack is **reset** to a single entry for the current URL (avoids duplicate/growing stacks on param key order or deep links). Param equality uses stable comparison (`areDrawerParamsEqual` in `lib/drawer-utils.ts`), not `JSON.stringify`.
+- Opening a drawer via in-app navigation typically **pushes** a new entry (see `pushToHistory`) so the store can **mirror** browser history for optimistic URL params and short cross-drawer transitions in `work-area-content`. **Users** navigate back and forward with the **browser** only; there is no duplicate back/forward control in the work-area header.
+- **`syncHistoryFromUrl`**: when the URL’s drawer + params do not match any in-app stack entry, the stack is **reset** to a single entry for the current URL (avoids duplicate/growing stacks on param key order or deep links). Param equality uses stable comparison (`areDrawerParamsEqual` in `lib/drawer-utils.ts`), not `JSON.stringify`.
 - **Browser back** is coordinated with URL sync in `work-area-content`; workflow forms may intercept when dirty.
 - **Decisions (current product intent):**
-  - **view-tree from map / marker:** **Push** onto drawer history (same as other navigations) so Back returns to the prior drawer/context; URL remains source of truth. Prefer **replace** only when the same drawer id is reopened with different params if we need to avoid duplicate stack entries (not implemented as a special case today).
-  - **Context switch** (e.g. primary list → workflow list): **Append** to history; do not auto-reset the stack when switching categories. Reset/fork is reserved for explicit product flows (e.g. closing work area), not for every cross-list navigation.
+  - **view-tree from map / marker:** **Push** onto the stack (same as other navigations) so internal state stays aligned when the user uses **browser Back** to return to the prior drawer/context; URL remains source of truth. Prefer **replace** only when the same drawer id is reopened with different params if we need to avoid duplicate stack entries (not implemented as a special case today).
+  - **Context switch** (e.g. primary list → workflow list): **Append** to the stack; do not auto-reset when switching categories. Reset/fork is reserved for explicit product flows (e.g. closing work area), not for every cross-list navigation.
 
 ## Tool drawers (`draw`, `measure`, …)
 
 - **Map-triggered**, often **half-sheet** on mobile; may use `extendOverBottomNav` or special cases in `work-area-content` (e.g. **draw** without pending polygon on narrow viewports).
 - **URL**: drawer id and params remain in the URL while open (single source of truth).
-- **Mental model:** Tools are **peer drawers** in history (push/pop like other drawers). **Draw** without a completed polygon may keep the sheet **closed** on narrow viewports so the map stays usable; that is **layout/sheet** behavior, not a separate history mode.
+- **Mental model:** Tools are **peer drawers** in the stack (same push/sync rules as other drawers). **Draw** without a completed polygon may keep the sheet **closed** on narrow viewports so the map stays usable; that is **layout/sheet** behavior, not a separate history mode.
 
 ## Ephemeral / `hideFromNav` drawers
 
-- Not listed in sidebar/bottom nav but still **addressable by URL** and **history** when navigated programmatically.
-- Document the relationship between **Back** in the work-area chrome, **browser back**, and **drawer history** for each class of drawer when adjusting behavior.
+- Not listed in sidebar/bottom nav but still **addressable by URL** and the **same stack** when navigated programmatically.
 
 ## Workflow URL params (tree-centric)
 
@@ -51,10 +50,9 @@ These params are passed through `navigate(drawerId, params)`; the URL remains th
 ## Registry & metadata (keep in sync with code)
 
 - **Registrations** live in [`lib/drawers.ts`](../lib/drawers.ts): each drawer calls `registerDrawer(id, metadata, importFn)`. Types and runtime helpers (`getDrawerMetadata`, nav filters, `getEffectiveDefaultMobileState`) are in [`lib/drawer-registry.ts`](../lib/drawer-registry.ts).
-- **Changing behavior or visibility** (tier gates, sidebar/bottom nav, mobile sheet, header back/forward): update the drawer’s `registerDrawer` entry and verify consumers (`getSidebarDrawerMetadata`, `work-area-content`, etc.). Treat the registration as part of the feature — avoid “works in UI but wrong metadata.”
+- **Changing behavior or visibility** (tier gates, sidebar/bottom nav, mobile sheet): update the drawer’s `registerDrawer` entry and verify consumers (`getSidebarDrawerMetadata`, `work-area-content`, etc.). Treat the registration as part of the feature — avoid “works in UI but wrong metadata.”
 - **`order`**: Sorts nav surfaces; fractional values group items (see comments in `lib/drawers.ts`). Multiple drawers may share the same `order`; use category + product intent. If two items collide unintentionally, fix or document in the PR.
 - **Labels**: `label` on metadata is the fallback English string; translated nav labels live in [`lib/i18n/navigation.ts`](../lib/i18n/navigation.ts) (`navigation.drawerLabels`) where keys exist.
-- **`showHeaderNav`**: Omitted means **show** back/forward in work-area chrome (`!== false`). Set `showHeaderNav: false` only when product explicitly hides chrome controls for that drawer.
 - **Inventory / audit**: [`drawer-audit.md`](./drawer-audit.md) lists registered ids and notes; refresh or cross-check when adding drawers or changing metadata.
 
 ## Manual QA (regression checks)
@@ -62,9 +60,9 @@ These params are passed through `navigate(drawerId, params)`; the URL remains th
 After changing URL sync, history, or nav helpers, verify:
 
 - Browser **Back** / **Forward** with a drawer open: URL and visible drawer stay aligned.
-- **Dirty workflow** form: sidebar switch to another drawer prompts discard; **bottom nav** toggle-close on the same item prompts discard; **work-area** header **Back** and **Forward** prompt discard when moving to another history entry.
+- **Dirty workflow** form: sidebar switch to another drawer prompts discard; **bottom nav** toggle-close on the same item prompts discard.
 - **Dirty workflow** form: **Add client** / **Add property** (or other sub-flows with `returnTo` = current drawer) does **not** prompt discard; **Close** still should.
-- **Map** → **view-tree** (or similar) → **Back** returns to the prior drawer/context.
+- **Map** → **view-tree** (or similar) → **browser Back** returns to the prior drawer/context.
 - Remove **`drawer`** from the URL (edit address bar or navigate to `/` without query): drawer UI closes.
 - **Deep link** with full params (`?drawer=…&…`): correct drawer opens and in-app history resets to that entry when it did not match the prior stack.
 

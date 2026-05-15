@@ -48,6 +48,7 @@ Time-based greeting (morning, afternoon, evening, night) using `getGreetingKey()
 - **Source**: `getDashboardUpcoming(trees, locale, speciesCatalog)` from `lib/utils/dashboard-upcoming.ts`
 - Scheduled services/inspections from tree history
 - Localized species names from catalog
+- **Participant “today” rows**: When the signed-in user sees **My work** / participant items merged into the Upcoming card, rows for **request**, **quote**, and **job** are omitted if that stage is **off** in the team org’s `crmWorkflowProfile.stages` (`isWorkflowStageOnInProfile` in `app/drawers/dashboard.tsx`). Tree-scheduled upcoming rows are unchanged.
 
 ### Trend Summary
 

@@ -72,6 +72,25 @@ The Groundzy workflow system provides a four-stage pipeline for tree care servic
 
 **Note**: There is **no** `edit-invoice` drawer. Invoices cannot be edited after creation.
 
+### Org CRM profile (`crmWorkflowProfile`) — QA checklist (stages + core modules)
+
+Team owners/admins configure **pipeline stages** and **core modules** (clients / properties) under **Settings → Organization → CRM workflow**. The app should not show dead-end CTAs when a stage or module is off. Use this matrix for manual QA (Teams org; adjust toggles in team settings between runs).
+
+| Area | Clients **off** | Properties **off** | Stage **off** (e.g. quotes) |
+|------|-----------------|--------------------|-----------------------------|
+| **Team settings save** | Turning **requests** on while **clients** is off should be **blocked** (validation). Same for **quotes/jobs** if **clients** or **properties** would be required. | Turning **quotes** or **jobs** on while **properties** is off should be **blocked**. | (Stages can be toggled per product rules.) |
+| **Request / quote / job forms** | Client picker hidden; section title reflects **property-only** or **hint** when neither surface applies; **Save ▾** email path hidden without client + email. | Property picker hidden; title **client-only** or hint. | N/A |
+| **Invoice form** | **Save ▾** gated on resolvable client email (job/client context). | — | — |
+| **Property form** (`add-property` / `edit-property`) | **Client *** picker hidden; create/update does not require `clientId` (`propertyFormShowsOrgClientPicker`). Edit shows read-only **Linked client** when the property still has a `clientId` from before the module was turned off. | Redirect / toast when properties module off (unchanged). | N/A |
+| **View request** | Convert to quote/job hidden when target stage or create action not allowed for the org profile + role. | — | Convert actions that target disabled stages hidden. |
+| **View quote** | — | — | Accept / create job gated when **job** stage or action disallowed. |
+| **View job** | Client/property deep links respect core module flags (labels still show from snapshot). | Same. | Create invoice hidden when **invoice** stage or action disallowed; quote/request buttons unchanged if IDs exist. |
+| **Nav / tree / org create menus** | Rows for add-request / add-quote / add-job / add-invoice filtered with the same rules as quick-add (`isWorkflowAddDrawerAllowed` + org create matrix). Invoice row requires **job** stage on and **client + property** in URL context when the menu supplies params. | Same. | Menu row for that drawer omitted. |
+| **Dashboard Upcoming (participant)** | — | — | Request/quote/job participant rows for disabled stages omitted from **today** merge. |
+| **Server / policy** | **Append workflow event** / creates that assume disabled modules or stages should be **rejected** (policy layer uses normalized CRM profile + core-module checks). | Same. | Same. |
+
+**Deep links**: Bookmarked `add-quote` (or similar) with the stage off should match existing access-denied / read-only patterns; server must still reject illegal creates.
+
 ### Drawer chain pattern
 - **List** → click item → `navigate("view-*", { *Id })`
 - **List** → Add button → `navigate("add-*")`

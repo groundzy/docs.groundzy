@@ -11,7 +11,7 @@ This document satisfies the audit brief: registry inventory, wiring, per-drawer 
 
 ### 1.1 `DrawerMetadata` and helpers (`lib/drawer-registry.ts`)
 
-- **Types:** `DrawerMetadata<T>` includes `id`, `label`, `icon`, `order`, `category`, `defaultProps`, `requiredProps`, `visibleForTiers`, `visibleInSidebar`, `visibleInMoreOnly`, `visibleInBottomNav`, `bottomNavPriority`, `hideFromNav`, `defaultMobileState`, `showHeaderNav`, `extendOverBottomNav`, `archetype`.
+- **Types:** `DrawerMetadata<T>` includes `id`, `label`, `icon`, `order`, `category`, `defaultProps`, `requiredProps`, `visibleForTiers`, `visibleInSidebar`, `visibleInMoreOnly`, `visibleInBottomNav`, `bottomNavPriority`, `hideFromNav`, `defaultMobileState`, `extendOverBottomNav`, `archetype`.
 - **Nav helpers:** `getSidebarDrawerMetadata`, `getBottomNavDrawerMetadata`, `getMoreDrawerMetadata`, `getMoreDrawerGroups`, `getDashboardNavItemsForMobile`, `getUpgradeOptionsForTier`, `getUpgradeGlowClass`.
 - **Section labels:** `MORE_SECTION_LABELS` and `NAV_GROUP_LABELS` live in `lib/drawers.ts` (not the registry file).
 
@@ -26,15 +26,14 @@ This document satisfies the audit brief: registry inventory, wiring, per-drawer 
 | URL as source of truth | `components/work-area/work-area-content.tsx` | `parseDrawerParams` + `useEffect` sync: sets `activeDrawer`, `workAreaState`, `mobileWorkAreaState`, `syncHistoryFromUrl`; tier guard `canUserAccessDrawer`; initial `/` → `dashboard` |
 | Drawer UI + lazy load | `work-area-content.tsx` | `DrawerWrapper` + `Suspense` + `getDrawerComponent`; imports `@/lib/drawers` to register all drawers |
 | Context inside drawer | `lib/drawer-context.tsx` | `DrawerProvider` supplies `navigate`, `updateParams`, `close` (pushes `/?` with `drawer` query) |
-| History / back | `stores/navigation-store.ts` | `drawerHistory`, `goBack` / `goForward`, `attemptWorkflowNavigate` for dirty **workflow** drawers |
+| History stack (URL sync / optimistic params) | `stores/navigation-store.ts` | `drawerHistory`, `pushToHistory`, `syncHistoryFromUrl`; `attemptWorkflowNavigate` for dirty **workflow** drawers |
 | Workflow dirty set | `navigation-store.ts` | `WORKFLOW_DRAWERS`: request/quote/job/invoice add+edit only (not client/property forms) |
-| Mobile chrome | `work-area-mobile.tsx`, `work-area-desktop.tsx` | `showHeaderNav !== false` (default **show** back/forward), label from metadata |
+| Mobile chrome | `work-area-mobile.tsx`, `work-area-desktop.tsx` | Title, sheet controls; back/forward is **browser** only |
 | Special mobile rules | `work-area-content.tsx` | e.g. `draw` drawer may open with sheet `closed` when no pending polygon on narrow viewports |
 
-### 1.4 `showHeaderNav` semantics
+### 1.4 Work-area header
 
-- In `work-area-mobile.tsx` / `work-area-desktop.tsx`: **`drawerMeta?.showHeaderNav !== false`** → default is **show** header back/forward.
-- **`ai-identifying-wand`** sets `showHeaderNav: true` but the inline comment says *"Wizard flow: no back/forward in header"* — **comment and value disagree**; verify intended UX (`lib/drawers.ts` ~557–569).
+- Work-area chrome shows the drawer title and layout controls (expand/dock, close, etc.). **Back/forward** is not duplicated in the header; users rely on **browser** history.
 
 ---
 
