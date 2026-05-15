@@ -8,6 +8,15 @@ This document is the **spec** for how drawer navigation, URL state, and in-app h
 - **No `drawer` query param** means the drawer is **closed** in the UI: `work-area-content` clears `activeDrawer` and work-area chrome to match the URL (except the initial `/` load path that replaces with `dashboard`).
 - [`navigation-store`](../stores/navigation-store.ts) tracks **activeDrawer**, **mobile work area**, **drawer history stack** (`drawerHistory`, `historyIndex`), and **workflow dirty** state.
 
+## Work area header context trail (breadcrumb-style)
+
+The **desktop shell header** and **mobile work area header** can show an optional **single-line context trail** (e.g. client · property · workflow document `#`) derived from the **same URL query params** as the active drawer. Labels load via the **same React Query hooks** as drawer bodies (`useClient`, `useProperty`, `useTree`, workflow getters, etc.), so there is no duplicate fetch layer.
+
+- **Implementation (app codebase):** `hooks/useWorkAreaHeaderContext.ts` (data), `lib/work-area-header-context.ts` (pure segment assembly), `components/work-area/work-area-header-title.tsx` (presentation).
+- **Interaction:** Segments are **presentational only** (not clickable); navigation remains sidebar, map, links inside drawers, and workflow discard rules unchanged.
+- **Trees:** For `view-tree` / `edit-tree`, resolved client/property precedes the **species** label when applicable; species stays the emphasized trailing segment when the existing scroll-based header logic shows it; when the in-drawer title is visible, the trail ends with the localized drawer title.
+- **i18n:** Separator string `workArea.headerContextSeparator` (default middle dot).
+
 ## History stack (`pushToHistory` / `syncHistoryFromUrl`)
 
 - Opening a drawer via in-app navigation typically **pushes** a new entry (see `pushToHistory`) so the store can **mirror** browser history for optimistic URL params and short cross-drawer transitions in `work-area-content`. **Users** navigate back and forward with the **browser** only; there is no duplicate back/forward control in the work-area header.
@@ -65,6 +74,7 @@ After changing URL sync, history, or nav helpers, verify:
 - **Map** → **view-tree** (or similar) → **browser Back** returns to the prior drawer/context.
 - Remove **`drawer`** from the URL (edit address bar or navigate to `/` without query): drawer UI closes.
 - **Deep link** with full params (`?drawer=…&…`): correct drawer opens and in-app history resets to that entry when it did not match the prior stack.
+- **Work area header trail:** Open `view-property`, `view-client`, `view-tree`, and a workflow detail drawer (`view-request`, `view-quote`, `view-job`, `view-invoice`) with typical params; confirm the header shows **client · property** (and optional `#`) without duplicate fetch errors; trail is non-interactive.
 
 ## Related
 
