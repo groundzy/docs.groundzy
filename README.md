@@ -16,6 +16,12 @@ Documentation for the Groundzy tree-mapping web application. This structure cove
 |----------|-------------|
 | [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) | Project overview, tech stack, features, getting started |
 
+### Sales (GTM)
+
+| Document | Description |
+|----------|-------------|
+| [sales/README.md](../sales/README.md) | Sales team GTM—ICP, compensation, attribution, operations, metrics, templates (repo root `sales/`) |
+
 ### Deployment
 
 | Document | Description |

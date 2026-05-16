@@ -15,3 +15,4 @@ One-off audits, inventories, and checklists that do not belong under `features/`
 | [add-request-form-drawer-audit-2026-04.md](./add-request-form-drawer-audit-2026-04.md) | Add/edit request form drawer — architecture, data flow, i18n, risks |
 | [workflow-request-quote-job-invoice-audit-2026-04.md](./workflow-request-quote-job-invoice-audit-2026-04.md) | Request → quote → job → invoice — event schemas, enrich, projections, legacy vs v3 |
 | [workflow-view-footer-layout-audit-2026-05.md](./workflow-view-footer-layout-audit-2026-05.md) | View-mode footer layout — CRM vs pipeline, two-row rule, More menu, primary vs overflow |
+| [lint-warnings-audit-2026-05-15.md](./lint-warnings-audit-2026-05-15.md) | ESLint warning counts by rule, priorities (P0–P3), file hot spots |

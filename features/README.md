@@ -27,5 +27,5 @@ Detailed documentation for each major feature in Groundzy.
 |------|----------|
 | Home | Dashboard, Trees (5 limit), Weather, AI (Identify, Chat), Map, Profile, Hire Pro |
 | Plus | Home + unlimited trees, Hire Pro |
-| Pro | Plus + Clients, Properties, full CRM (no workflow) |
-| Teams | Pro + Requests, Quotes, Jobs, Invoices, Team Settings |
+| Pro | Plus + Clients, Properties, workflow (requests → quotes → jobs → invoices), solo practice |
+| Teams | Pro-equivalent product access in a **shared org**: multiple seats, team settings, collaboration, dashboards, seasonal seats |

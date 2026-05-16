@@ -109,6 +109,16 @@ docs/
     └── assets.md
 ```
 
+---
+
+## Sales documentation (repository root)
+
+| Path | Documentation |
+|------|---------------|
+| `sales/` | [sales/README.md](../sales/README.md) — outbound program, compensation, attribution, operations, FAQ, templates |
+
+---
+
 ## Root
 
 | Path | Documentation |
