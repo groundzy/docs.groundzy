@@ -7,4 +7,4 @@ Runbooks and cross-cutting operational docs (pricing alignment, backfills).
 | [firestore-workflow-org-list-rules-regression.md](./firestore-workflow-org-list-rules-regression.md) | Known issue: org workflow list drawers empty after stricter Firestore rules; rollback reference and follow-up |
 | [inconsistencies-and-plan.md](./inconsistencies-and-plan.md) | Pricing inconsistencies and fix plan (multi-repo) |
 | [backfill-subscription-tier.md](./backfill-subscription-tier.md) | Legacy Plus / subscription tier backfill |
-| [hoa-heritage-import.md](./hoa-heritage-import.md) | HOA / Heritage CSV import: qty→zone, objectives, ranges, idempotency, boundary review |
+| [property-guest-and-export.md](./property-guest-and-export.md) | Property-scoped hub guest links + inventory CSV: tiers, kill switch, revoke, PII |
