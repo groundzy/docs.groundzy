@@ -7,6 +7,7 @@ Operational reference for **property-scoped client hub** access and **property i
 - **Guest link:** Staff mints an opaque token in `property_guest_tokens`. The client opens `/property-guest/{token}`; the app sets the usual hub cookie with a **property scope** so `/client-hub` only lists documents and trees for that property.
 - **CSV export:** Staff downloads `GET /api/properties/{propertyId}/export-inventory` (or `?format=csv`) with a Firebase ID token. Response is UTF-8 CSV with BOM (Excel-friendly), capped tree count and history rows (see app `lib/property-export/build-property-inventory-csv.ts` and shared loader `lib/property-export/load-property-trees-export.ts`).
 - **PDF report:** Same route with `?format=pdf` returns `application/pdf` — cover, three summary metrics (trees, health-assessed count, zone count for the property), **site map** (static Mapbox image or on-page placeholder copy if unavailable), then **one section per tree** (species marker, measurements, location, health notes, activity) — no duplicate inventory table. Implementation: `lib/property-export/render-property-report-pdf.ts`, context `lib/property-export/property-report-data.ts`. Content caps match CSV via `loadPropertyTreesForExport`.
+- **Subset export:** Optional explicit tree IDs limit the CSV/PDF to those trees only (same auth and gates). **`GET`** supports repeated query params `treeIds=<id>` (comma-separated values in a single param are also split). **`POST`** `/api/properties/{propertyId}/export-inventory` with JSON `{ "format": "csv" | "pdf", "treeIds": string[] }` is required when selecting **more than 50** trees (URL length); the app uses **`EXPORT_INVENTORY_MAX_TREE_IDS_GET`** (see `lib/property-export/export-inventory-constants.ts`). Every ID must exist and belong to the route’s `propertyId` and org; otherwise the API returns **400** (`tree_id_not_found`, `tree_id_not_in_scope`, etc.). Max **500** distinct IDs per request (`PROPERTY_EXPORT_MAX_TREE_IDS_REQUEST`). Output filenames use a `selected` segment when exporting a subset. PDF copy distinguishes **full property** vs **selected trees** (metrics and zone list follow the subset when applicable).
 
 ## Map snapshot (PDF)
 
@@ -39,7 +40,7 @@ Kinds: `property_guest_mint`, `property_guest_session`, `property_export` — se
 
 ## Logs
 
-Structured events: `property_guest_mint`, `property_guest_session_from_token`, `property_export_csv`, `property_export_pdf` (prefix `[document-portal]`). Token values are not logged; token suffix may appear for correlation.
+Structured events: `property_guest_mint`, `property_guest_session_from_token`, `property_export_csv`, `property_export_pdf` (prefix `[document-portal]`). Token values are not logged; token suffix may appear for correlation. Export logs may include `subset: true`, `treeCount`, and `requestedIdsCount` (subset flows).
 
 ## Revoking access
 
