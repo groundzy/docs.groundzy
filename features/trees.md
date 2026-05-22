@@ -97,3 +97,10 @@ See `types/tree.ts`:
 | `useSpeciesCatalog` | Species catalog |
 | `useSearchSpecies` | Species search |
 | `useQuickPicks` | Quick picks by region |
+
+## Archive and public map projection
+
+- **Full archive** (soft delete for everyone): `useDeleteTree` calls `POST /api/trees/archive` (Firebase Admin SDK) so `tree_public`, `tree_public_summaries`, and `community_posts` stay consistent with Firestore security rules (collaborators previously could not update summaries client-side).
+- **Owner-only archive** (shared users keep access): `useArchiveTreeForOwnerOnly` calls `POST /api/trees/archive-for-owner`.
+- **Safety net**: Cloud Function `onTreePublicLifecycleWritten` repeats public cleanup when `trees/{treeId}` transitions to deleted or owner-archived (idempotent alongside the APIs).
+- **Backfill**: Global admins may run `POST /api/trees/cleanup-orphaned-public` for orphaned public projections.
